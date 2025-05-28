@@ -19,4 +19,4 @@ CREATE TABLE IF NOT EXISTS `la_user` (
 
 -- 初始化管理员账号（密码：admin123，使用BCrypt加密）
 INSERT INTO `la_user` (`id`, `username`, `password`, `avatar`, `nickname`, `email`, `status`, `create_time`, `update_time`)
-VALUES ('1', 'admin', '$2a$10$X/XoMoNF6OEu6KmP.GXQGOEPxAdP3k9c3xoPvvqKFXkCyZIvsYihq', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '管理员', 'admin@example.com', 1, NOW(), NOW()); 
+VALUES ('1', 'admin', '$2a$10$rOXX4HqoPvCgkQ29JowMVu9IsC.2j90gXsmyzgidMR6DfEibOZ6fy', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '管理员', 'admin@example.com', 1, NOW(), NOW());
