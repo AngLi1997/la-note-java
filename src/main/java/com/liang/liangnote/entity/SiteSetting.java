@@ -37,11 +37,6 @@ public class SiteSetting extends BaseEntity {
     private String slogan;
     
     /**
-     * 网站头像/Logo
-     */
-    private String avatar;
-    
-    /**
      * 社交链接，JSON格式存储
      */
     private String socialLinks;

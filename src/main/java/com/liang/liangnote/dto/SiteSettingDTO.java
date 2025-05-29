@@ -39,11 +39,6 @@ public class SiteSettingDTO {
     private String slogan;
     
     /**
-     * 网站头像/Logo
-     */
-    private String avatar;
-    
-    /**
      * 社交链接列表
      */
     private List<String> socialLinks;

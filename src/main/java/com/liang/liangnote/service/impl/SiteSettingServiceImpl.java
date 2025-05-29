@@ -76,7 +76,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         siteSetting.setSubtitle(siteSettingDTO.getSubtitle());
         siteSetting.setDescription(siteSettingDTO.getDescription());
         siteSetting.setSlogan(siteSettingDTO.getSlogan());
-        siteSetting.setAvatar(siteSettingDTO.getAvatar());
         siteSetting.setKeywords(siteSettingDTO.getKeywords());
         siteSetting.setIcp(siteSettingDTO.getIcp());
         

@@ -171,7 +171,6 @@ CREATE TABLE IF NOT EXISTS `la_site_setting` (
   `subtitle` varchar(200) DEFAULT NULL COMMENT '网站副标题',
   `description` varchar(500) DEFAULT NULL COMMENT '网站描述',
   `slogan` varchar(200) DEFAULT NULL COMMENT '网站标语/口号',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '网站头像/Logo',
   `social_links` text DEFAULT NULL COMMENT '社交链接，JSON格式存储',
   `keywords` varchar(255) DEFAULT NULL COMMENT '网站关键词',
   `icp` varchar(100) DEFAULT NULL COMMENT '备案信息',
@@ -185,5 +184,5 @@ CREATE TABLE IF NOT EXISTS `la_site_setting` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='网站设置表';
 
 -- 插入初始网站设置数据
-INSERT INTO `la_site_setting` (`id`, `title`, `subtitle`, `description`, `slogan`, `avatar`, `social_links`, `keywords`, `icp`, `is_default`, `create_user`, `update_user`, `create_time`, `update_time`)
-VALUES ('1', 'liang-note', '个人技术博客', '我会在这里分享我的心得，干货笔记，以及生活中的感悟、拾光、看法，与思考。', '精致的五官是心动的开始，迷人的气质是动情的深渊。', 'https://picsum.photos/id/1012/200/200', '["https://github.com/yourusername", "https://twitter.com/yourusername"]', '技术,博客,笔记,分享', '粤ICP备xxxxxxxx号', 1, '1', '1', NOW(), NOW());
+INSERT INTO `la_site_setting` (`id`, `title`, `subtitle`, `description`, `slogan`, `social_links`, `keywords`, `icp`, `is_default`, `create_user`, `update_user`, `create_time`, `update_time`)
+VALUES ('1', 'liang-note', '个人技术博客', '我会在这里分享我的心得，干货笔记，以及生活中的感悟、拾光、看法，与思考。', '精致的五官是心动的开始，迷人的气质是动情的深渊。', '["https://github.com/yourusername", "https://twitter.com/yourusername"]', '技术,博客,笔记,分享', '粤ICP备xxxxxxxx号', 1, '1', '1', NOW(), NOW());
