@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 授权请求配置
                 .authorizeRequests()
                 // 允许访问登录接口和Swagger相关接口
-                .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**").permitAll()
                 // 所有其他请求需要认证
                 .anyRequest().authenticated();

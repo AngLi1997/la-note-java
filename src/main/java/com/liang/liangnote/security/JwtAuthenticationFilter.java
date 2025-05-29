@@ -49,14 +49,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 logger.error("JWT Token已过期");
             }
-        } else {
-            logger.warn("JWT Token不以Bearer开头或为空");
         }
 
         // 验证token并设置认证信息
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
