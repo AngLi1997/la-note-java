@@ -27,3 +27,10 @@ mybatis-plus:
 jwt:
   secret: liangnote_jwt_secret_key_2023
   expiration: 86400  # 24小时(秒)
+
+site-config:
+  minio:
+    endpoint: http://172.30.1.160:9000
+    accessKey: minio
+    secretKey: Bmos1018
+    bucketName: la-note
