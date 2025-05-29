@@ -8,22 +8,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 吐槽数据传输对象
+ * 拾光数据传输对象
  * @author liang
  * @version 1.0.0
  * @date 2023/11/5
  */
 @Data
-@ApiModel(description = "吐槽数据传输对象")
+@ApiModel(description = "拾光数据传输对象")
 public class ComplaintDTO {
 
-    @ApiModelProperty("吐槽ID")
+    @ApiModelProperty("拾光ID")
     private String id;
 
-    @ApiModelProperty("吐槽标题")
+    @ApiModelProperty("拾光标题")
     private String title;
 
-    @ApiModelProperty("吐槽内容")
+    @ApiModelProperty("拾光内容")
     private String content;
 
     @ApiModelProperty("心情标签")

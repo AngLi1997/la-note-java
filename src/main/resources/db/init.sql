@@ -86,11 +86,11 @@ INSERT INTO `la_user_setting` (`id`, `user_id`, `bio`, `blog_intro`, `contact_em
 VALUES
 ('1001', '1', '热爱技术的全栈开发者', '这是一个分享技术文章和编程心得的个人博客', 'admin@example.com', 'https://github.com/admin', '{"wechat":"admin_wechat","twitter":"@admin_twitter"}', '1', '1', NOW(), NOW());
 
--- 吐槽表
+-- 拾光表
 CREATE TABLE IF NOT EXISTS `la_complaint` (
   `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `title` varchar(100) NOT NULL COMMENT '吐槽标题',
-  `content` text COMMENT '吐槽内容',
+  `title` varchar(100) NOT NULL COMMENT '拾光标题',
+  `content` text COMMENT '拾光内容',
   `mood` varchar(50) DEFAULT NULL COMMENT '心情标签',
   `images` text DEFAULT NULL COMMENT '图片URL，多个以逗号分隔',
   `status` tinyint(1) DEFAULT '1' COMMENT '发布状态: 0-草稿, 1-已发布',
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `la_complaint` (
     `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `idx_complaint_mood` (`mood`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='吐槽表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='拾光表';
 
 -- 时间轴事件表
 CREATE TABLE IF NOT EXISTS `la_timeline_event` (
@@ -131,7 +131,7 @@ INSERT INTO `la_timeline_event` (`id`, `title`, `content`, `event_date`, `catego
 ('3005', '开始学习TypeScript', '决定深入学习TypeScript，强类型系统对于大型项目的维护非常有帮助。记录了一些关键概念和实践经验。', '2023-08-10', '学习', '💡', 1, '1', '1', NOW(), NOW()),
 ('3006', '第一个独立项目', '完成了第一个完全由自己设计和开发的Web应用，采用了Vue3+TypeScript+Vite的技术栈。', '2023-07-02', '项目', '🏆', 1, '1', '1', NOW(), NOW());
 
--- 插入30条吐槽测试数据
+-- 插入30条拾光测试数据
 INSERT INTO `la_complaint` (`id`, `title`, `content`, `mood`, `images`, `status`, `create_user`, `update_user`, `create_time`, `update_time`) VALUES
 ('2001', '今天的工作太难了', '需求变更太频繁，根本做不完，感觉要加班到天亮了...', '焦虑', 'https://example.com/images/work1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 30 DAY), DATE_SUB(NOW(), INTERVAL 30 DAY)),
 ('2002', '学习Spring Boot好难', '看了一天文档，感觉还是一头雾水，谁能告诉我怎么配置这个依赖啊？', '无奈', 'https://example.com/images/study1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 29 DAY), DATE_SUB(NOW(), INTERVAL 29 DAY)),
@@ -186,4 +186,4 @@ CREATE TABLE IF NOT EXISTS `la_site_setting` (
 
 -- 插入初始网站设置数据
 INSERT INTO `la_site_setting` (`id`, `title`, `subtitle`, `description`, `slogan`, `avatar`, `social_links`, `keywords`, `icp`, `is_default`, `create_user`, `update_user`, `create_time`, `update_time`)
-VALUES ('1', 'liang-note', '个人技术博客', '我会在这里分享我的心得，干货笔记，以及生活中的感悟、吐槽、看法，与思考。', '精致的五官是心动的开始，迷人的气质是动情的深渊。', 'https://picsum.photos/id/1012/200/200', '["https://github.com/yourusername", "https://twitter.com/yourusername"]', '技术,博客,笔记,分享', '粤ICP备xxxxxxxx号', 1, '1', '1', NOW(), NOW());
+VALUES ('1', 'liang-note', '个人技术博客', '我会在这里分享我的心得，干货笔记，以及生活中的感悟、拾光、看法，与思考。', '精致的五官是心动的开始，迷人的气质是动情的深渊。', 'https://picsum.photos/id/1012/200/200', '["https://github.com/yourusername", "https://twitter.com/yourusername"]', '技术,博客,笔记,分享', '粤ICP备xxxxxxxx号', 1, '1', '1', NOW(), NOW());

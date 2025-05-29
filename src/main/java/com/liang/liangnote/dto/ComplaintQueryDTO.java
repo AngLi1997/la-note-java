@@ -5,13 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 吐槽查询参数DTO
+ * 拾光查询参数DTO
  * @author liang
  * @version 1.0.0
  * @date 2023/11/5
  */
 @Data
-@ApiModel(description = "吐槽查询参数")
+@ApiModel(description = "拾光查询参数")
 public class ComplaintQueryDTO {
 
     @ApiModelProperty("页码，从1开始")

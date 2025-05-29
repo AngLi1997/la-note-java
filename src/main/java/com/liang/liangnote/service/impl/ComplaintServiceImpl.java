@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 吐槽服务实现类
+ * 拾光服务实现类
  * @author liang
  * @version 1.0.0
  * @date 2023/11/5
@@ -36,7 +36,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     public Resp<PageResponseDTO<ComplaintDTO>> listComplaints(ComplaintQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<Complaint> queryWrapper = Wrappers.lambdaQuery();
-        // 只查询已发布的吐槽
+        // 只查询已发布的拾光
         queryWrapper.eq(Complaint::getStatus, 1);
         // 按心情标签筛选
         if (StringUtils.isNotBlank(queryDTO.getMood())) {
@@ -65,7 +65,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public Resp<List<String>> listMoods() {
-        // 查询所有发布的吐槽
+        // 查询所有发布的拾光
         LambdaQueryWrapper<Complaint> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(Complaint::getStatus, 1);
         queryWrapper.select(Complaint::getMood);
@@ -84,12 +84,12 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public Resp<ComplaintDTO> getComplaintById(String id) {
         if (StringUtils.isBlank(id)) {
-            return Resp.failed("吐槽ID不能为空");
+            return Resp.failed("拾光ID不能为空");
         }
         
         Complaint complaint = complaintMapper.selectById(id);
         if (complaint == null) {
-            return Resp.failed("吐槽不存在");
+            return Resp.failed("拾光不存在");
         }
         
         // 转换为DTO
@@ -99,10 +99,10 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * 将吐槽实体转换为DTO
+     * 将拾光实体转换为DTO
      *
-     * @param complaint 吐槽实体
-     * @return 吐槽DTO
+     * @param complaint 拾光实体
+     * @return 拾光DTO
      */
     private ComplaintDTO convertToDTO(Complaint complaint) {
         ComplaintDTO dto = new ComplaintDTO();

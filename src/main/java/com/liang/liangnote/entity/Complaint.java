@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 吐槽实体类
+ * 拾光实体类
  * @author liang
  * @version 1.0.0
  * @date 2023/11/5
@@ -17,12 +17,12 @@ import lombok.EqualsAndHashCode;
 public class Complaint extends BaseEntity {
 
     /**
-     * 吐槽标题
+     * 拾光标题
      */
     private String title;
 
     /**
-     * 吐槽内容
+     * 拾光内容
      */
     private String content;
 
