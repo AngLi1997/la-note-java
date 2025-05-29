@@ -26,6 +26,9 @@ public class ArticleDTO {
     @ApiModelProperty("文章摘要")
     private String summary;
 
+    @ApiModelProperty("文章内容")
+    private String content;
+
     @ApiModelProperty("文章分类")
     private String category;
 

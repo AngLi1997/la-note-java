@@ -106,6 +106,26 @@ public class ArticleServiceImpl implements ArticleService {
         return Resp.success(allTags.stream().distinct().collect(Collectors.toList()));
     }
 
+    @Override
+    public Resp<ArticleDTO> getArticleById(String id) {
+        // 查询文章
+        Article article = articleMapper.selectById(id);
+        
+        // 文章不存在
+        if (article == null) {
+            return Resp.failed("文章不存在");
+        }
+        
+        // 增加浏览量
+        article.setViewCount(article.getViewCount() + 1);
+        articleMapper.updateById(article);
+        
+        // 转换为DTO
+        ArticleDTO articleDTO = convertToDTO(article);
+        
+        return Resp.success(articleDTO);
+    }
+
     /**
      * 将文章实体转换为DTO
      *

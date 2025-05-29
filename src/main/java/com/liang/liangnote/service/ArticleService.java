@@ -24,6 +24,14 @@ public interface ArticleService {
     Resp<PageResponseDTO<ArticleDTO>> listArticles(ArticleQueryDTO queryDTO);
 
     /**
+     * 根据ID获取文章详情
+     *
+     * @param id 文章ID
+     * @return 文章详情
+     */
+    Resp<ArticleDTO> getArticleById(String id);
+
+    /**
      * 获取所有分类
      *
      * @return 分类列表

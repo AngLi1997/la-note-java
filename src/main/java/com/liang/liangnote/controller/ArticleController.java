@@ -8,6 +8,7 @@ import com.liang.liangnote.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +39,18 @@ public class ArticleController {
     @ApiOperation(value = "分页查询文章列表", notes = "支持按分类和标签筛选")
     public Resp<PageResponseDTO<ArticleDTO>> listArticles(ArticleQueryDTO queryDTO) {
         return articleService.listArticles(queryDTO);
+    }
+
+    /**
+     * 根据ID获取文章详情
+     *
+     * @param id 文章ID
+     * @return 文章详情
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "获取文章详情", notes = "根据文章ID获取详细信息")
+    public Resp<ArticleDTO> getArticleById(@PathVariable String id) {
+        return articleService.getArticleById(id);
     }
 
     /**
