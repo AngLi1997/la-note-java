@@ -47,7 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
             queryWrapper.like(Article::getTags, queryDTO.getTag());
         }
         // 按创建时间降序排序
-        queryWrapper.orderByDesc(Article::getCreateTime);
+        queryWrapper.orderByDesc(Article::getId);
 
         // 执行分页查询
         Page<Article> page = new Page<>(queryDTO.getPageNum(), queryDTO.getPageSize());

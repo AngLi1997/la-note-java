@@ -85,3 +85,53 @@ INSERT INTO `la_article` (`id`, `title`, `summary`, `content`, `category`, `tags
 INSERT INTO `la_user_setting` (`id`, `user_id`, `bio`, `blog_intro`, `contact_email`, `github_url`, `extra_contacts`, `create_user`, `update_user`, `create_time`, `update_time`)
 VALUES
 ('1001', '1', '热爱技术的全栈开发者', '这是一个分享技术文章和编程心得的个人博客', 'admin@example.com', 'https://github.com/admin', '{"wechat":"admin_wechat","twitter":"@admin_twitter"}', '1', '1', NOW(), NOW());
+
+-- 吐槽表
+CREATE TABLE IF NOT EXISTS `la_complaint` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `title` varchar(100) NOT NULL COMMENT '吐槽标题',
+  `content` text COMMENT '吐槽内容',
+  `mood` varchar(50) DEFAULT NULL COMMENT '心情标签',
+  `images` text DEFAULT NULL COMMENT '图片URL，多个以逗号分隔',
+  `status` tinyint(1) DEFAULT '1' COMMENT '发布状态: 0-草稿, 1-已发布',
+  `create_user` varchar(32) DEFAULT NULL COMMENT '创建人',
+    `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_complaint_mood` (`mood`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='吐槽表';
+
+-- 插入30条吐槽测试数据
+INSERT INTO `la_complaint` (`id`, `title`, `content`, `mood`, `images`, `status`, `create_user`, `update_user`, `create_time`, `update_time`) VALUES
+('2001', '今天的工作太难了', '需求变更太频繁，根本做不完，感觉要加班到天亮了...', '焦虑', 'https://example.com/images/work1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 30 DAY), DATE_SUB(NOW(), INTERVAL 30 DAY)),
+('2002', '学习Spring Boot好难', '看了一天文档，感觉还是一头雾水，谁能告诉我怎么配置这个依赖啊？', '无奈', 'https://example.com/images/study1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 29 DAY), DATE_SUB(NOW(), INTERVAL 29 DAY)),
+('2003', '地铁又挤爆了', '早高峰的地铁简直是噩梦，为什么大家都在同一时间上班啊！', '生气', 'https://example.com/images/life1.jpg,https://example.com/images/life2.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 28 DAY), DATE_SUB(NOW(), INTERVAL 28 DAY)),
+('2004', '老板的新需求太离谱', '刚做完一个功能，老板又说要改，之前的设计都白做了', '生气', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 27 DAY), DATE_SUB(NOW(), INTERVAL 27 DAY)),
+('2005', '今天终于解决了一个Bug', '折腾了三天的Bug终于解决了，原来是一个拼写错误，真是哭笑不得', '开心', 'https://example.com/images/tech1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 26 DAY), DATE_SUB(NOW(), INTERVAL 26 DAY)),
+('2006', '分手了，心情低落', '我们在一起三年，最终还是走到了尽头，不知道以后该怎么办', '悲伤', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 25 DAY), DATE_SUB(NOW(), INTERVAL 25 DAY)),
+('2007', '朋友聚会被放鸽子', '约好的聚会，结果所有人都临时有事，就我一个人傻等，真是太伤心了', '无奈', 'https://example.com/images/social1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 24 DAY), DATE_SUB(NOW(), INTERVAL 24 DAY)),
+('2008', '新框架学习进度', '尝试学习新的前端框架，感觉好多概念不太理解，需要更多时间消化', '焦虑', NULL, 0, '1', '1', DATE_SUB(NOW(), INTERVAL 23 DAY), DATE_SUB(NOW(), INTERVAL 23 DAY)),
+('2009', '周末加班没补偿', '公司让周末加班，结果没有加班费也没有调休，太黑心了', '生气', 'https://example.com/images/work2.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 22 DAY), DATE_SUB(NOW(), INTERVAL 22 DAY)),
+('2010', '新电影太好看了', '今天看了期待已久的电影，剧情超出预期，演员表演也很到位', '兴奋', 'https://example.com/images/movie1.jpg,https://example.com/images/movie2.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 21 DAY), DATE_SUB(NOW(), INTERVAL 21 DAY)),
+('2011', '连续熬夜三天', '项目上线在即，连续熬夜三天，感觉身体被掏空了', '疲惫', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 20 DAY), DATE_SUB(NOW(), INTERVAL 20 DAY)),
+('2012', '又被相亲安排了', '父母安排的第10次相亲，对方条件很好但没感觉，拒绝后又被说不懂事', '无奈', 'https://example.com/images/date1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 19 DAY), DATE_SUB(NOW(), INTERVAL 19 DAY)),
+('2013', '网络游戏太卡了', '花钱买的网游，结果服务器卡成狗，客服还爱答不理的', '生气', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 18 DAY), DATE_SUB(NOW(), INTERVAL 18 DAY)),
+('2014', '同事总是甩锅给我', '做错事从来不承认，问题总是推给别人，这种同事真的很难合作', '生气', 'https://example.com/images/work3.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 17 DAY), DATE_SUB(NOW(), INTERVAL 17 DAY)),
+('2015', '今天面试通过了', '经过三轮面试，终于拿到了心仪公司的offer，薪资比现在高50%', '兴奋', 'https://example.com/images/interview1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 16 DAY), DATE_SUB(NOW(), INTERVAL 16 DAY)),
+('2016', '房租又涨价了', '刚租了一年，房东说要涨价20%，太离谱了，这年头租房真是太难了', '无奈', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 15 DAY), DATE_SUB(NOW(), INTERVAL 15 DAY)),
+('2017', '新技术学习笔记', '最近学习了GraphQL，感觉比REST API在某些场景下更灵活，记录一下体会', '开心', 'https://example.com/images/tech2.jpg', 0, '1', '1', DATE_SUB(NOW(), INTERVAL 14 DAY), DATE_SUB(NOW(), INTERVAL 14 DAY)),
+('2018', '健身计划中断了', '连续健身一个月后因为加班不得不中断，感觉前功尽弃，太可惜了', '悲伤', 'https://example.com/images/fitness1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 13 DAY), DATE_SUB(NOW(), INTERVAL 13 DAY)),
+('2019', '股票大跌心态崩了', '辛辛苦苦攒的钱投进股市，结果一周就跌了30%，真是太惨了', '悲伤', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 12 DAY), DATE_SUB(NOW(), INTERVAL 12 DAY)),
+('2020', '同学聚会尴尬事', '同学聚会上，发现自己是唯一一个还没结婚的，被问得尴尬死了', '无奈', 'https://example.com/images/party1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 11 DAY), DATE_SUB(NOW(), INTERVAL 11 DAY)),
+('2021', '新领导不懂技术乱指挥', '新来的领导完全不懂技术，却喜欢指手画脚，搞得团队士气低落', '生气', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 10 DAY), DATE_SUB(NOW(), INTERVAL 10 DAY)),
+('2022', '终于拿到驾照了', '考了三次科目二，第四次终于通过了，太开心了！', '兴奋', 'https://example.com/images/license1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 9 DAY), DATE_SUB(NOW(), INTERVAL 9 DAY)),
+('2023', '被老板当众批评', '在会议上被老板点名批评，虽然不是我的错，但面子挂不住啊', '悲伤', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 8 DAY), DATE_SUB(NOW(), INTERVAL 8 DAY)),
+('2024', '饭卡丢了好烦', '食堂饭卡丢了，里面还有200多块钱，补办还要收手续费，真烦人', '无奈', 'https://example.com/images/card1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 7 DAY), DATE_SUB(NOW(), INTERVAL 7 DAY)),
+('2025', '深夜加班没打车费', '公司规定晚上10点后加班有打车报销，结果财务说预算用完了不给报，太坑了', '生气', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 6 DAY), DATE_SUB(NOW(), INTERVAL 6 DAY)),
+('2026', '论文被拒绝了', '投了一篇论文到期刊，苦等3个月被拒绝，审稿意见简直莫名其妙', '悲伤', 'https://example.com/images/paper1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 5 DAY), DATE_SUB(NOW(), INTERVAL 5 DAY)),
+('2027', 'Docker容器化实践', '今天尝试把项目Docker化，遇到了很多坑，记录一下解决过程', '焦虑', 'https://example.com/images/docker1.jpg', 0, '1', '1', DATE_SUB(NOW(), INTERVAL 4 DAY), DATE_SUB(NOW(), INTERVAL 4 DAY)),
+('2028', '遇到神队友打游戏', '今天遇到一个超厉害的队友，带我连赢10把，爽翻了！', '兴奋', 'https://example.com/images/game1.jpg,https://example.com/images/game2.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 3 DAY)),
+('2029', '连续下雨一周了', '已经连续下雨一周了，衣服都发霉了，心情也跟着变差', '无奈', 'https://example.com/images/rain1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY)),
+('2030', '年终奖太少了', '辛苦工作一年，年终奖还不够交房租，真是心寒啊！', '悲伤', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY));
