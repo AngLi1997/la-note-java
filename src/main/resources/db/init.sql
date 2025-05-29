@@ -163,3 +163,27 @@ INSERT INTO `la_complaint` (`id`, `title`, `content`, `mood`, `images`, `status`
 ('2028', '遇到神队友打游戏', '今天遇到一个超厉害的队友，带我连赢10把，爽翻了！', '兴奋', 'https://example.com/images/game1.jpg,https://example.com/images/game2.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 3 DAY)),
 ('2029', '连续下雨一周了', '已经连续下雨一周了，衣服都发霉了，心情也跟着变差', '无奈', 'https://example.com/images/rain1.jpg', 1, '1', '1', DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY)),
 ('2030', '年终奖太少了', '辛苦工作一年，年终奖还不够交房租，真是心寒啊！', '悲伤', NULL, 1, '1', '1', DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY));
+
+-- 创建网站设置表
+CREATE TABLE IF NOT EXISTS `la_site_setting` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `title` varchar(100) NOT NULL COMMENT '网站标题',
+  `subtitle` varchar(200) DEFAULT NULL COMMENT '网站副标题',
+  `description` varchar(500) DEFAULT NULL COMMENT '网站描述',
+  `slogan` varchar(200) DEFAULT NULL COMMENT '网站标语/口号',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '网站头像/Logo',
+  `social_links` text DEFAULT NULL COMMENT '社交链接，JSON格式存储',
+  `keywords` varchar(255) DEFAULT NULL COMMENT '网站关键词',
+  `icp` varchar(100) DEFAULT NULL COMMENT '备案信息',
+  `is_default` tinyint(1) DEFAULT 1 COMMENT '是否为默认设置',
+  `create_user` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='网站设置表';
+
+-- 插入初始网站设置数据
+INSERT INTO `la_site_setting` (`id`, `title`, `subtitle`, `description`, `slogan`, `avatar`, `social_links`, `keywords`, `icp`, `is_default`, `create_user`, `update_user`, `create_time`, `update_time`)
+VALUES ('1', 'liang-note', '个人技术博客', '我会在这里分享我的心得，干货笔记，以及生活中的感悟、吐槽、看法，与思考。', '精致的五官是心动的开始，迷人的气质是动情的深渊。', 'https://picsum.photos/id/1012/200/200', '["https://github.com/yourusername", "https://twitter.com/yourusername"]', '技术,博客,笔记,分享', '粤ICP备xxxxxxxx号', 1, '1', '1', NOW(), NOW());
