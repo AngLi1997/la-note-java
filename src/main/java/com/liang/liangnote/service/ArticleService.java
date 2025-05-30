@@ -44,4 +44,28 @@ public interface ArticleService {
      * @return 标签列表
      */
     Resp<List<String>> listTags();
+    
+    /**
+     * 创建文章
+     *
+     * @param articleDTO 文章信息
+     * @return 创建结果
+     */
+    Resp<ArticleDTO> createArticle(ArticleDTO articleDTO);
+    
+    /**
+     * 更新文章
+     *
+     * @param articleDTO 文章信息
+     * @return 更新结果
+     */
+    Resp<ArticleDTO> updateArticle(ArticleDTO articleDTO);
+    
+    /**
+     * 删除文章
+     *
+     * @param id 文章ID
+     * @return 删除结果
+     */
+    Resp<Boolean> deleteArticle(String id);
 } 

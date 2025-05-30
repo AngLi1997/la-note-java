@@ -69,14 +69,15 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Resp<List<String>> listCategories() {
-        // 查询所有发布的文章
+        // 查询所有分类
         LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(Article::getStatus, 1);
-        queryWrapper.select(Article::getCategory);
-        List<Article> articles = articleMapper.selectList(queryWrapper);
+        queryWrapper.select(Article::getCategory)
+                .groupBy(Article::getCategory)
+                .isNotNull(Article::getCategory)
+                .ne(Article::getCategory, "");
 
-        // 提取所有不重复的分类
-        List<String> categories = articles.stream()
+        List<String> categories = articleMapper.selectList(queryWrapper)
+                .stream()
                 .map(Article::getCategory)
                 .filter(StringUtils::isNotBlank)
                 .distinct()
@@ -87,42 +88,42 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Resp<List<String>> listTags() {
-        // 查询所有发布的文章
+        // 查询所有标签
         LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(Article::getStatus, 1);
-        queryWrapper.select(Article::getTags);
-        List<Article> articles = articleMapper.selectList(queryWrapper);
+        queryWrapper.select(Article::getTags)
+                .isNotNull(Article::getTags)
+                .ne(Article::getTags, "");
 
-        // 提取所有不重复的标签
-        List<String> allTags = new ArrayList<>();
-        articles.stream()
+        List<String> allTags = articleMapper.selectList(queryWrapper)
+                .stream()
                 .map(Article::getTags)
                 .filter(StringUtils::isNotBlank)
-                .forEach(tagStr -> {
-                    String[] tagArray = tagStr.split(",");
-                    allTags.addAll(Arrays.asList(tagArray));
-                });
+                .flatMap(tags -> Arrays.stream(tags.split(",")))
+                .map(String::trim)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
 
-        return Resp.success(allTags.stream().distinct().collect(Collectors.toList()));
+        return Resp.success(allTags);
     }
 
     @Override
     public Resp<ArticleDTO> getArticleById(String id) {
         // 查询文章
         Article article = articleMapper.selectById(id);
-        
+
         // 文章不存在
         if (article == null) {
             return Resp.failed("文章不存在");
         }
-        
+
         // 增加浏览量
         article.setViewCount(article.getViewCount() + 1);
         articleMapper.updateById(article);
-        
+
         // 转换为DTO
         ArticleDTO articleDTO = convertToDTO(article);
-        
+
         return Resp.success(articleDTO);
     }
 
@@ -135,14 +136,89 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDTO convertToDTO(Article article) {
         ArticleDTO dto = new ArticleDTO();
         BeanUtils.copyProperties(article, dto);
-        
+
         // 处理标签
         if (StringUtils.isNotBlank(article.getTags())) {
             dto.setTags(Arrays.asList(article.getTags().split(",")));
         } else {
             dto.setTags(new ArrayList<>());
         }
-        
+
         return dto;
+    }
+
+    /**
+     * 将DTO转换为文章实体
+     *
+     * @param dto 文章DTO
+     * @return 文章实体
+     */
+    private Article convertToEntity(ArticleDTO dto) {
+        Article article = new Article();
+        BeanUtils.copyProperties(dto, article);
+
+        // 处理标签
+        if (dto.getTags() != null && !dto.getTags().isEmpty()) {
+            article.setTags(String.join(",", dto.getTags()));
+        }
+        
+        // 设置浏览量默认值
+        if (article.getViewCount() == null) {
+            article.setViewCount(0);
+        }
+        
+        return article;
+    }
+    
+    @Override
+    public Resp<ArticleDTO> createArticle(ArticleDTO articleDTO) {
+        // 转换为实体
+        Article article = convertToEntity(articleDTO);
+        
+        // 插入数据库
+        articleMapper.insert(article);
+        
+        // 返回结果
+        return Resp.success(convertToDTO(article));
+    }
+    
+    @Override
+    public Resp<ArticleDTO> updateArticle(ArticleDTO articleDTO) {
+        // 校验文章是否存在
+        if (StringUtils.isBlank(articleDTO.getId())) {
+            return Resp.failed("文章ID不能为空");
+        }
+        
+        Article existingArticle = articleMapper.selectById(articleDTO.getId());
+        if (existingArticle == null) {
+            return Resp.failed("文章不存在");
+        }
+        
+        // 转换为实体
+        Article article = convertToEntity(articleDTO);
+        
+        // 更新数据库
+        articleMapper.updateById(article);
+        
+        // 返回结果
+        return Resp.success(convertToDTO(article));
+    }
+    
+    @Override
+    public Resp<Boolean> deleteArticle(String id) {
+        // 校验文章是否存在
+        if (StringUtils.isBlank(id)) {
+            return Resp.failed("文章ID不能为空");
+        }
+        
+        Article existingArticle = articleMapper.selectById(id);
+        if (existingArticle == null) {
+            return Resp.failed("文章不存在");
+        }
+        
+        // 删除文章（逻辑删除）
+        articleMapper.deleteById(id);
+        
+        return Resp.success(true);
     }
 } 

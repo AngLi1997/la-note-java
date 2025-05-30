@@ -21,8 +21,9 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
-      logic-delete-field: deleteTime
-      logic-not-delete-value: "null"
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
 
 jwt:
   secret: liangnote_jwt_secret_key_2023

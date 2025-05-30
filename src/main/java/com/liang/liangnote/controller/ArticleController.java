@@ -7,10 +7,7 @@ import com.liang.liangnote.dto.PageResponseDTO;
 import com.liang.liangnote.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -73,5 +70,43 @@ public class ArticleController {
     @ApiOperation(value = "获取所有标签", notes = "返回所有文章标签列表")
     public Resp<List<String>> listTags() {
         return articleService.listTags();
+    }
+    
+    /**
+     * 创建文章
+     *
+     * @param articleDTO 文章信息
+     * @return 创建结果
+     */
+    @PostMapping
+    @ApiOperation(value = "创建文章", notes = "创建新文章")
+    public Resp<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
+        return articleService.createArticle(articleDTO);
+    }
+    
+    /**
+     * 更新文章
+     *
+     * @param id 文章ID
+     * @param articleDTO 文章信息
+     * @return 更新结果
+     */
+    @PutMapping("/{id}")
+    @ApiOperation(value = "更新文章", notes = "根据ID更新文章信息")
+    public Resp<ArticleDTO> updateArticle(@PathVariable String id, @RequestBody ArticleDTO articleDTO) {
+        articleDTO.setId(id);
+        return articleService.updateArticle(articleDTO);
+    }
+    
+    /**
+     * 删除文章
+     *
+     * @param id 文章ID
+     * @return 删除结果
+     */
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "删除文章", notes = "根据ID删除文章")
+    public Resp<Boolean> deleteArticle(@PathVariable String id) {
+        return articleService.deleteArticle(id);
     }
 } 
