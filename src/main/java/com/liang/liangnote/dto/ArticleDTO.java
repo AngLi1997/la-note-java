@@ -46,4 +46,7 @@ public class ArticleDTO {
 
     @ApiModelProperty("浏览量")
     private Integer viewCount;
+    
+    @ApiModelProperty("发布状态: 0-草稿, 1-已发布")
+    private Integer status;
 } 

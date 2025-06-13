@@ -36,8 +36,10 @@ public class ArticleServiceImpl implements ArticleService {
     public Resp<PageResponseDTO<ArticleDTO>> listArticles(ArticleQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
-        // 只查询已发布的文章
-        queryWrapper.eq(Article::getStatus, 1);
+        // 只有当status不为null时才加状态筛选，否则查全部
+        if (queryDTO.getStatus() != null) {
+            queryWrapper.eq(Article::getStatus, queryDTO.getStatus());
+        }
         // 按分类筛选
         if (StringUtils.isNotBlank(queryDTO.getCategory()) && !"all".equalsIgnoreCase(queryDTO.getCategory())) {
             queryWrapper.eq(Article::getCategory, queryDTO.getCategory());

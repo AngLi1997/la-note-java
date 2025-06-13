@@ -25,4 +25,7 @@ public class ArticleQueryDTO {
 
     @ApiModelProperty("标签")
     private String tag;
+
+    @ApiModelProperty("文章状态: 0-草稿, 1-已发布，可选")
+    private Integer status;
 } 

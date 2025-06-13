@@ -45,8 +45,8 @@ public class BaseEntity {
     private LocalDateTime updateTime;
 
     /**
-     * 删除时间
+     * 删除标志 0-未删除 1-已删除
      */
     @TableLogic
-    private Boolean deleted;
+    private Integer deleted;
 }
