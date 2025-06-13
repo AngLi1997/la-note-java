@@ -43,7 +43,7 @@ CREATE TABLE `la_article` (
   `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
   KEY `idx_category` (`category`),
   KEY `idx_status` (`status`),
@@ -55,7 +55,7 @@ CREATE TABLE `la_article` (
 -- Dumping data for table `la_article`
 --
 
-INSERT INTO `la_article` VALUES ('1001','Spring Boot 入门教程','Spring Boot框架入门指南，从零开始学习Spring Boot','# Spring Boot 入门教程\n\n## 简介\nSpring Boot是一个用于简化Spring应用开发的框架，它提供了自动配置、内嵌服务器等特性...\n\n## 环境搭建\n首先需要安装JDK和Maven...\n\n## 创建项目\n使用Spring Initializr可以快速创建一个Spring Boot项目...','技术教程','Java,Spring,后端','http://172.30.1.160:9000/bmos-agent/1920771687566016512_IMG_6258.jpeg',6,1,'1','1','2025-04-28 16:28:23','2025-05-03 16:28:23',NULL);
+INSERT INTO `la_article` VALUES ('1933497502166806529','新服务器环境部署脚本','','# 云服务器jdk8、mysql8、nginx，使用docker国内环境部署脚本\n\n~~~shell\n#!/bin/bash\nset -e\n\necho \"==== Step 1: 安装 Docker（如未安装） ====\"\n\nif ! command -v docker &> /dev/null; then\n  echo \"未检测到 Docker，开始安装...\"\n  yum install -y yum-utils device-mapper-persistent-data lvm2\n  yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo\n  yum install -y docker-ce docker-ce-cli containerd.io\n  systemctl start docker\n  systemctl enable docker\nelse\n  echo \"Docker 已安装，跳过安装步骤。\"\nfi\n\necho \"==== Step 2: 配置 Docker 国内镜像（如未配置） ====\"\n\nDOCKER_MIRROR_CONFIG=\"/etc/docker/daemon.json\"\nif [ ! -f \"$DOCKER_MIRROR_CONFIG\" ] || ! grep -q \"registry-mirrors\" \"$DOCKER_MIRROR_CONFIG\"; then\n  mkdir -p /etc/docker\n  cat > \"$DOCKER_MIRROR_CONFIG\" <<EOF\n{\n  \"registry-mirrors\": [\"https://g0b9eosa.mirror.aliyuncs.com\",\"https://registry.docker-cn.com\"],\n  \"live-restore\": true,\n  \"insecure-registries\": [\"172.16.0.4\"]\n}\nEOF\n  systemctl daemon-reexec\n  systemctl restart docker\n  echo \"Docker 镜像源已配置。\"\nelse\n  echo \"Docker 已配置镜像源，跳过配置步骤。\"\nfi\n\necho \"==== Step 3: 创建 Docker 网络 env-net（如未存在） ====\"\nif ! docker network ls | grep -q \"env-net\"; then\n  docker network create env-net\n  echo \"网络 env-net 创建成功。\"\nelse\n  echo \"网络 env-net 已存在，跳过创建。\"\nfi\n\n# 定义服务启动函数\nrun_if_not_exists() {\n  local name=$1\n  local image=$2\n  local run_cmd=$3\n\n  if docker ps -a --format \'{{.Names}}\' | grep -wq \"$name\"; then\n    echo \"容器 [$name] 已存在，跳过创建。\"\n    docker start \"$name\" > /dev/null || true\n  else\n    echo \"启动容器 [$name]...\"\n    eval \"$run_cmd\"\n  fi\n}\n\necho \"==== Step 4: 启动服务 ====\"\n\n# JDK 1.8 容器\nrun_if_not_exists \"java8\" \"openjdk:8-jdk-alpine\" \"\ndocker run -d \\\n  --name java8 \\\n  --network env-net \\\n  -v /opt/envs/java:/app \\\n  openjdk:8-jdk-alpine \\\n  tail -f /dev/null\n\"\n\n# MySQL 8.0\nrun_if_not_exists \"mysql8\" \"mysql:8.0\" \"\ndocker run -d \\\n  --name mysql8 \\\n  --network env-net \\\n  -e MYSQL_ROOT_PASSWORD=root \\\n  -v /opt/envs/mysql:/var/lib/mysql \\\n  -p 3306:3306 \\\n  mysql:8.0 \\\n  --default-authentication-plugin=mysql_native_password\n\"\n\n# Nginx\nrun_if_not_exists \"nginx\" \"nginx:latest\" \"\ndocker run -d \\\n  --name nginx \\\n  --network env-net \\\n  -p 80:80 \\\n  -v /opt/envs/nginx/html:/usr/share/nginx/html \\\n  -v /opt/envs/nginx/conf:/etc/nginx/conf.d \\\n  nginx:latest\n\"\n\n# MinIO\nrun_if_not_exists \"minio\" \"quay.io/minio/minio\" \"\ndocker run -d \\\n  --name minio \\\n  --network env-net \\\n  -p 9000:9000 -p 9001:9001 \\\n  -e \\\"MINIO_ROOT_USER=admin\\\" \\\n  -e \\\"MINIO_ROOT_PASSWORD=admin123\\\" \\\n  -v /opt/envs/minio/data:/data \\\n  -v /opt/envs/minio/config:/root/.minio \\\n  quay.io/minio/minio server /data --console-address \\\":9001\\\"\n\"\n\necho \"==== 所有服务已确保运行 ====\"\ndocker ps\n\n~~~','运维','linux,docker','',2,1,'1','1','2025-06-13 20:11:42','2025-06-13 20:11:42',0);
 
 --
 -- Table structure for table `la_complaint`
@@ -74,7 +74,7 @@ CREATE TABLE `la_complaint` (
   `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
   KEY `idx_complaint_mood` (`mood`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='吐槽表';
@@ -84,7 +84,7 @@ CREATE TABLE `la_complaint` (
 -- Dumping data for table `la_complaint`
 --
 
-INSERT INTO `la_complaint` VALUES ('2025','深夜加班没打车费','公司规定晚上10点后加班有打车报销，结果财务说预算用完了不给报，太坑了','生气','http://172.30.1.160:9000/bmos-agent/1920771687566016512_IMG_6258.jpeg',1,'1','1','2025-05-23 09:56:46','2025-05-23 09:56:46',NULL);
+INSERT INTO `la_complaint` VALUES ('1933497857415966722','cursor是真牛逼','感觉随时都会失业～','平静','http://172.30.1.160:9000/la-note/1749816769369_0669f23aab4741c5ac3a052ce437e29c.png',1,'1','1','2025-06-13 20:13:07','2025-06-13 20:13:07',0),('1933500364192083969','博客主题设计','感觉大道至简，先暂时用这个，后面慢慢优化哈哈哈哈哈','开心','http://172.30.1.160:9000/la-note/1749817379801_194cde4389e340e3bb3fa1593bd46757.png',1,'1','1','2025-06-13 20:23:04','2025-06-13 20:23:04',0);
 
 --
 -- Table structure for table `la_site_setting`
@@ -106,7 +106,7 @@ CREATE TABLE `la_site_setting` (
   `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='网站设置表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -115,7 +115,7 @@ CREATE TABLE `la_site_setting` (
 -- Dumping data for table `la_site_setting`
 --
 
-INSERT INTO `la_site_setting` VALUES ('1','Liang\'s Note','个人技术博客','我会在这里分享我的心得，干货笔记，以及生活中的感悟、吐槽、看法，与思考。','交换余生','[\"https://github.com/AngLi1997\"]','技术,博客,笔记,分享','',1,'1','1','2025-05-29 14:38:15','2025-05-29 14:38:15',NULL);
+INSERT INTO `la_site_setting` VALUES ('1','Liang\'s Note','个人技术博客','我会在这里分享我的心得，干货笔记，以及生活中的感悟、吐槽、看法，与思考。','交换余生','[\"https://github.com/AngLi1997\"]','技术,博客,笔记,分享','',1,'1','1','2025-05-29 14:38:15','2025-05-29 14:38:15',0);
 
 --
 -- Table structure for table `la_timeline_event`
@@ -135,7 +135,7 @@ CREATE TABLE `la_timeline_event` (
   `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
   KEY `idx_timeline_category` (`category`),
   KEY `idx_timeline_event_date` (`event_date`)
@@ -146,7 +146,7 @@ CREATE TABLE `la_timeline_event` (
 -- Dumping data for table `la_timeline_event`
 --
 
-INSERT INTO `la_timeline_event` VALUES ('3001','个人博客上线','经过三天的努力，个人技术博客终于正式上线辣！','2025-05-29','技术','🚀',1,'1','1','2025-05-29 10:46:22','2025-05-29 10:46:22',NULL);
+INSERT INTO `la_timeline_event` VALUES ('1933498604102742018','Liang\'s Note版本1发布！','经过一天半Cursor同学的努力，v1版本终于发布辣！','2025-06-13','博客','🎉',0,'1','1','2025-06-13 20:16:05','2025-06-13 20:16:25',0);
 
 --
 -- Table structure for table `la_user`
@@ -167,7 +167,7 @@ CREATE TABLE `la_user` (
   `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
@@ -177,7 +177,7 @@ CREATE TABLE `la_user` (
 -- Dumping data for table `la_user`
 --
 
-INSERT INTO `la_user` VALUES ('1','admin','$2a$10$rOXX4HqoPvCgkQ29JowMVu9IsC.2j90gXsmyzgidMR6DfEibOZ6fy','https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif','李昂','liangliangaichirou@gmail.com',NULL,1,NULL,NULL,'2025-05-27 16:57:34','2025-05-27 16:57:34',NULL);
+INSERT INTO `la_user` VALUES ('1','admin','$2a$10$rOXX4HqoPvCgkQ29JowMVu9IsC.2j90gXsmyzgidMR6DfEibOZ6fy','https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif','李昂','liangliangaichirou@gmail.com',NULL,1,NULL,NULL,'2025-05-27 16:57:34','2025-05-27 16:57:34',0);
 
 --
 -- Table structure for table `la_user_setting`
@@ -197,7 +197,7 @@ CREATE TABLE `la_user_setting` (
   `update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户设置表';
@@ -207,7 +207,7 @@ CREATE TABLE `la_user_setting` (
 -- Dumping data for table `la_user_setting`
 --
 
-INSERT INTO `la_user_setting` VALUES ('1001','1','热爱技术的全栈开发者','这是一个分享技术文章和编程心得的个人博客','liangliangaichirou@gmail.com','https://github.com/AngLi1997','{\"wechat\":\"Dec_LiangLiang\"}','1','1','2025-05-28 17:04:32','2025-05-28 17:04:32',NULL);
+INSERT INTO `la_user_setting` VALUES ('1001','1','热爱技术的全栈开发者','这是一个分享技术文章和编程心得的个人博客','liangliangaichirou@gmail.com','https://github.com/AngLi1997','{\"wechat\":\"Dec_LiangLiang\"}','1','1','2025-05-28 17:04:32','2025-05-28 17:04:32',0);
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -218,4 +218,4 @@ INSERT INTO `la_user_setting` VALUES ('1001','1','热爱技术的全栈开发者
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-29 17:51:31
+-- Dump completed on 2025-06-13 20:28:33
