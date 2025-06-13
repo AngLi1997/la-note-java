@@ -36,8 +36,10 @@ public class ComplaintServiceImpl implements ComplaintService {
     public Resp<PageResponseDTO<ComplaintDTO>> listComplaints(ComplaintQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<Complaint> queryWrapper = Wrappers.lambdaQuery();
-        // 只查询已发布的拾光
-        queryWrapper.eq(Complaint::getStatus, 1);
+        // 只有当不是管理页面查询时，才只查询已发布的拾光
+        if (queryDTO.getShowAll() == null || !queryDTO.getShowAll()) {
+            queryWrapper.eq(Complaint::getStatus, 1);
+        }
         // 按心情标签筛选
         if (StringUtils.isNotBlank(queryDTO.getMood())) {
             queryWrapper.eq(Complaint::getMood, queryDTO.getMood());

@@ -22,4 +22,7 @@ public class ComplaintQueryDTO {
 
     @ApiModelProperty("心情标签")
     private String mood;
+    
+    @ApiModelProperty("是否显示所有状态的拾光（包括草稿），用于管理页面")
+    private Boolean showAll;
 } 
