@@ -31,4 +31,7 @@ public class TimelineEventDTO {
 
     @ApiModelProperty("事件图标")
     private String icon;
+    
+    @ApiModelProperty("显示顺序")
+    private Integer displayOrder;
 } 
