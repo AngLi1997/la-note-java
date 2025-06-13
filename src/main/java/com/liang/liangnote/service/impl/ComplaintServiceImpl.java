@@ -97,6 +97,78 @@ public class ComplaintServiceImpl implements ComplaintService {
         
         return Resp.success(complaintDTO);
     }
+    
+    @Override
+    public Resp<ComplaintDTO> createComplaint(ComplaintDTO complaintDTO) {
+        if (complaintDTO == null) {
+            return Resp.failed("拾光数据不能为空");
+        }
+        
+        // 转换为实体
+        Complaint complaint = new Complaint();
+        BeanUtils.copyProperties(complaintDTO, complaint);
+        
+        // 处理图片列表
+        if (complaintDTO.getImages() != null && !complaintDTO.getImages().isEmpty()) {
+            complaint.setImages(String.join(",", complaintDTO.getImages()));
+        } else {
+            complaint.setImages(null); // 设置为null而不是空字符串
+        }
+        
+        // 保存到数据库
+        complaintMapper.insert(complaint);
+        
+        // 返回保存后的数据
+        return getComplaintById(complaint.getId());
+    }
+    
+    @Override
+    public Resp<ComplaintDTO> updateComplaint(ComplaintDTO complaintDTO) {
+        if (complaintDTO == null || StringUtils.isBlank(complaintDTO.getId())) {
+            return Resp.failed("拾光ID不能为空");
+        }
+        
+        // 检查是否存在
+        Complaint existingComplaint = complaintMapper.selectById(complaintDTO.getId());
+        if (existingComplaint == null) {
+            return Resp.failed("拾光不存在");
+        }
+        
+        // 转换为实体
+        Complaint complaint = new Complaint();
+        BeanUtils.copyProperties(complaintDTO, complaint);
+        
+        // 处理图片列表
+        if (complaintDTO.getImages() != null && !complaintDTO.getImages().isEmpty()) {
+            complaint.setImages(String.join(",", complaintDTO.getImages()));
+        } else {
+            complaint.setImages(null); // 设置为null而不是空字符串
+        }
+        
+        // 更新到数据库
+        complaintMapper.updateById(complaint);
+        
+        // 返回更新后的数据
+        return getComplaintById(complaint.getId());
+    }
+    
+    @Override
+    public Resp<Boolean> deleteComplaint(String id) {
+        if (StringUtils.isBlank(id)) {
+            return Resp.failed("拾光ID不能为空");
+        }
+        
+        // 检查是否存在
+        Complaint complaint = complaintMapper.selectById(id);
+        if (complaint == null) {
+            return Resp.failed("拾光不存在");
+        }
+        
+        // 从数据库删除
+        int result = complaintMapper.deleteById(id);
+        
+        return result > 0 ? Resp.success(true) : Resp.failed("删除失败");
+    }
 
     /**
      * 将拾光实体转换为DTO
@@ -112,9 +184,8 @@ public class ComplaintServiceImpl implements ComplaintService {
         if (StringUtils.isNotBlank(complaint.getImages())) {
             List<String> imageList = Arrays.asList(complaint.getImages().split(","));
             dto.setImages(imageList);
-        } else {
-            dto.setImages(new ArrayList<>());
         }
+        // 不需要else设置空列表，因为DTO中已经初始化为空ArrayList
         
         return dto;
     }

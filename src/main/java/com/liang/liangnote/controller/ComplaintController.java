@@ -63,4 +63,50 @@ public class ComplaintController {
             @PathVariable String id) {
         return complaintService.getComplaintById(id);
     }
+    
+    /**
+     * 创建拾光
+     *
+     * @param complaintDTO 拾光数据
+     * @return 创建结果
+     */
+    @PostMapping
+    @ApiOperation(value = "创建拾光", notes = "创建新的拾光")
+    public Resp<ComplaintDTO> createComplaint(
+            @ApiParam(value = "拾光数据", required = true)
+            @RequestBody ComplaintDTO complaintDTO) {
+        return complaintService.createComplaint(complaintDTO);
+    }
+    
+    /**
+     * 更新拾光
+     *
+     * @param id 拾光ID
+     * @param complaintDTO 拾光数据
+     * @return 更新结果
+     */
+    @PutMapping("/{id}")
+    @ApiOperation(value = "更新拾光", notes = "根据ID更新拾光")
+    public Resp<ComplaintDTO> updateComplaint(
+            @ApiParam(value = "拾光ID", required = true)
+            @PathVariable String id,
+            @ApiParam(value = "拾光数据", required = true)
+            @RequestBody ComplaintDTO complaintDTO) {
+        complaintDTO.setId(id);
+        return complaintService.updateComplaint(complaintDTO);
+    }
+    
+    /**
+     * 删除拾光
+     *
+     * @param id 拾光ID
+     * @return 删除结果
+     */
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "删除拾光", notes = "根据ID删除拾光")
+    public Resp<Boolean> deleteComplaint(
+            @ApiParam(value = "拾光ID", required = true)
+            @PathVariable String id) {
+        return complaintService.deleteComplaint(id);
+    }
 } 

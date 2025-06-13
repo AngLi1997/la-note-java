@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,11 +31,14 @@ public class ComplaintDTO {
     private String mood;
 
     @ApiModelProperty("图片列表")
-    private List<String> images;
+    private List<String> images = new ArrayList<>();
 
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;
 
     @ApiModelProperty("更新时间")
     private LocalDateTime updateTime;
+    
+    @ApiModelProperty("发布状态: 0-草稿, 1-已发布")
+    private Integer status;
 } 

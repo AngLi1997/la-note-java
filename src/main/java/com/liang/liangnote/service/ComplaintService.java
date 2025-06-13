@@ -37,4 +37,28 @@ public interface ComplaintService {
      * @return 拾光详情
      */
     Resp<ComplaintDTO> getComplaintById(String id);
+    
+    /**
+     * 创建拾光
+     *
+     * @param complaintDTO 拾光数据
+     * @return 创建的拾光
+     */
+    Resp<ComplaintDTO> createComplaint(ComplaintDTO complaintDTO);
+    
+    /**
+     * 更新拾光
+     *
+     * @param complaintDTO 拾光数据
+     * @return 更新后的拾光
+     */
+    Resp<ComplaintDTO> updateComplaint(ComplaintDTO complaintDTO);
+    
+    /**
+     * 删除拾光
+     *
+     * @param id 拾光ID
+     * @return 是否删除成功
+     */
+    Resp<Boolean> deleteComplaint(String id);
 } 
