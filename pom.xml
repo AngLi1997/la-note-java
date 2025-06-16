@@ -142,7 +142,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.liang.liangnote.LiangNoteApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>

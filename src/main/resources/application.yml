@@ -31,7 +31,7 @@ jwt:
 
 site-config:
   minio:
-    endpoint: http://172.30.1.160:9000
-    accessKey: minio
-    secretKey: Bmos1018
+    endpoint: http://http://127.0.0.1:9000
+    accessKey: minioadmin
+    secretKey: minioadmin
     bucketName: la-note
