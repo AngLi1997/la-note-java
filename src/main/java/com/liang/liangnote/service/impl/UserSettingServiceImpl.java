@@ -39,14 +39,48 @@ public class UserSettingServiceImpl implements UserSettingService {
         // 查询是否存在设置
         UserSetting existSetting = getByUserId(userSetting.getUserId());
         
+        boolean result = false;
         if (existSetting != null) {
             // 设置ID，进行更新
             userSetting.setId(existSetting.getId());
-            return userSettingMapper.updateById(userSetting) > 0;
+            result = userSettingMapper.updateById(userSetting) > 0;
         } else {
             // 新增设置
-            return userSettingMapper.insert(userSetting) > 0;
+            result = userSettingMapper.insert(userSetting) > 0;
         }
+        
+        // 如果保存成功，检查是否需要更新用户表中的信息
+        if (result) {
+            User user = userMapper.selectById(userSetting.getUserId());
+            if (user != null) {
+                boolean needUpdate = false;
+                
+                // 更新头像
+                if (userSetting.getAvatar() != null && !userSetting.getAvatar().isEmpty()) {
+                    user.setAvatar(userSetting.getAvatar());
+                    needUpdate = true;
+                }
+                
+                // 更新昵称
+                if (userSetting.getNickname() != null && !userSetting.getNickname().isEmpty()) {
+                    user.setNickname(userSetting.getNickname());
+                    needUpdate = true;
+                }
+                
+                // 更新手机号
+                if (userSetting.getPhone() != null && !userSetting.getPhone().isEmpty()) {
+                    user.setPhone(userSetting.getPhone());
+                    needUpdate = true;
+                }
+                
+                // 如果有需要更新的字段，则更新用户表
+                if (needUpdate) {
+                    userMapper.updateById(user);
+                }
+            }
+        }
+        
+        return result;
     }
 
     @Override
