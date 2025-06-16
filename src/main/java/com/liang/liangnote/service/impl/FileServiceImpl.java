@@ -5,6 +5,7 @@ import com.liang.liangnote.dto.FileUploadDTO;
 import com.liang.liangnote.exception.BusinessException;
 import com.liang.liangnote.service.FileService;
 import io.minio.*;
+import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -90,8 +91,13 @@ public class FileServiceImpl implements FileService {
             inputStream.close();
             
             // 构建文件访问URL
-            String url = minioConfig.getEndpoint() + "/" + minioConfig.getBucketName() + "/" + objectName;
-            
+//            String url = minioConfig.getEndpoint() + "/" + minioConfig.getBucketName() + "/" + objectName;
+
+            String url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                            .bucket(minioConfig.getBucketName())
+                            .object(objectName)
+                            .method(Method.GET)
+                    .build());
             // 构建并返回结果
             return new FileUploadDTO(originalFilename, objectName, file.getSize(), contentType, url);
         } catch (Exception e) {
