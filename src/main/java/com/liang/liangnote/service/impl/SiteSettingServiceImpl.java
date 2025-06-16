@@ -78,6 +78,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         siteSetting.setSlogan(siteSettingDTO.getSlogan());
         siteSetting.setKeywords(siteSettingDTO.getKeywords());
         siteSetting.setIcp(siteSettingDTO.getIcp());
+        siteSetting.setFooter(siteSettingDTO.getFooter());
         
         // 处理社交链接
         if (siteSettingDTO.getSocialLinks() != null) {

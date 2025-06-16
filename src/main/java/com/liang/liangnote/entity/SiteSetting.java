@@ -52,6 +52,11 @@ public class SiteSetting extends BaseEntity {
     private String icp;
     
     /**
+     * 网站页脚
+     */
+    private String footer;
+    
+    /**
      * 是否为默认设置
      */
     private Boolean isDefault;

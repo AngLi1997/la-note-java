@@ -52,4 +52,9 @@ public class SiteSettingDTO {
      * 备案信息
      */
     private String icp;
+    
+    /**
+     * 网站页脚
+     */
+    private String footer;
 } 
