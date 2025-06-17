@@ -3,7 +3,8 @@ package com.liang.liangnote.service;
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.ComplaintDTO;
 import com.liang.liangnote.dto.ComplaintQueryDTO;
-import com.liang.liangnote.dto.PageResponseDTO;
+import com.liang.liangnote.dto.vo.ComplaintVO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface ComplaintService {
      * @param queryDTO 查询参数
      * @return 拾光列表分页结果
      */
-    Resp<PageResponseDTO<ComplaintDTO>> listComplaints(ComplaintQueryDTO queryDTO);
+    Resp<PageResponseVO<ComplaintVO>> listComplaints(ComplaintQueryDTO queryDTO);
 
     /**
      * 获取所有心情标签
@@ -36,7 +37,7 @@ public interface ComplaintService {
      * @param id 拾光ID
      * @return 拾光详情
      */
-    Resp<ComplaintDTO> getComplaintById(String id);
+    Resp<ComplaintVO> getComplaintById(String id);
     
     /**
      * 创建拾光
@@ -44,7 +45,7 @@ public interface ComplaintService {
      * @param complaintDTO 拾光数据
      * @return 创建的拾光
      */
-    Resp<ComplaintDTO> createComplaint(ComplaintDTO complaintDTO);
+    Resp<ComplaintVO> createComplaint(ComplaintDTO complaintDTO);
     
     /**
      * 更新拾光
@@ -52,7 +53,7 @@ public interface ComplaintService {
      * @param complaintDTO 拾光数据
      * @return 更新后的拾光
      */
-    Resp<ComplaintDTO> updateComplaint(ComplaintDTO complaintDTO);
+    Resp<ComplaintVO> updateComplaint(ComplaintDTO complaintDTO);
     
     /**
      * 删除拾光

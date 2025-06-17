@@ -5,6 +5,8 @@ import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.LoginDTO;
 import com.liang.liangnote.dto.LoginResponseDTO;
 import com.liang.liangnote.dto.UserInfoDTO;
+import com.liang.liangnote.dto.vo.LoginResponseVO;
+import com.liang.liangnote.dto.vo.UserInfoVO;
 import com.liang.liangnote.entity.User;
 import com.liang.liangnote.mapper.UserMapper;
 import com.liang.liangnote.service.AuthService;
@@ -44,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public Resp<LoginResponseDTO> login(LoginDTO loginDTO) {
+    public Resp<LoginResponseVO> login(LoginDTO loginDTO) {
         // 直接从数据库查询用户
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, loginDTO.getUsername());
@@ -76,13 +78,11 @@ public class AuthServiceImpl implements AuthService {
         final String token = jwtUtil.generateToken(userDetails);
 
         // 构造返回结果
-        LoginResponseDTO responseDTO = new LoginResponseDTO();
+        LoginResponseVO responseDTO = new LoginResponseVO();
         responseDTO.setToken(token);
-
-        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        UserInfoVO userInfoDTO = new UserInfoVO();
         BeanUtils.copyProperties(user, userInfoDTO);
         responseDTO.setUserInfo(userInfoDTO);
-
         return Resp.success(responseDTO);
     }
 } 

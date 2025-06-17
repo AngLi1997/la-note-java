@@ -1,6 +1,7 @@
 package com.liang.liangnote.service;
 
 import com.liang.liangnote.dto.FileUploadDTO;
+import com.liang.liangnote.dto.vo.FileUploadVO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -16,7 +17,7 @@ public interface FileService {
      * @param file 文件对象
      * @return 文件上传结果
      */
-    FileUploadDTO uploadFile(MultipartFile file);
+    FileUploadVO uploadFile(MultipartFile file);
     
     /**
      * 上传文件到MinIO指定文件夹
@@ -24,5 +25,5 @@ public interface FileService {
      * @param folderPrefix 文件夹前缀
      * @return 文件上传结果
      */
-    FileUploadDTO uploadFile(MultipartFile file, String folderPrefix);
+    FileUploadVO uploadFile(MultipartFile file, String folderPrefix);
 } 

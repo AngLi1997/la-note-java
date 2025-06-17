@@ -3,7 +3,8 @@ package com.liang.liangnote.controller;
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.ComplaintDTO;
 import com.liang.liangnote.dto.ComplaintQueryDTO;
-import com.liang.liangnote.dto.PageResponseDTO;
+import com.liang.liangnote.dto.vo.ComplaintVO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
 import com.liang.liangnote.service.ComplaintService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +36,7 @@ public class ComplaintController {
      */
     @GetMapping("/list")
     @ApiOperation(value = "分页查询拾光列表", notes = "支持按心情筛选")
-    public Resp<PageResponseDTO<ComplaintDTO>> listComplaints(ComplaintQueryDTO queryDTO) {
+    public Resp<PageResponseVO<ComplaintVO>> listComplaints(ComplaintQueryDTO queryDTO) {
         return complaintService.listComplaints(queryDTO);
     }
 
@@ -58,7 +59,7 @@ public class ComplaintController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "获取拾光详情", notes = "根据ID获取拾光详情")
-    public Resp<ComplaintDTO> getComplaintById(
+    public Resp<ComplaintVO> getComplaintById(
             @ApiParam(value = "拾光ID", required = true)
             @PathVariable String id) {
         return complaintService.getComplaintById(id);
@@ -72,7 +73,7 @@ public class ComplaintController {
      */
     @PostMapping
     @ApiOperation(value = "创建拾光", notes = "创建新的拾光")
-    public Resp<ComplaintDTO> createComplaint(
+    public Resp<ComplaintVO> createComplaint(
             @ApiParam(value = "拾光数据", required = true)
             @RequestBody ComplaintDTO complaintDTO) {
         return complaintService.createComplaint(complaintDTO);
@@ -87,7 +88,7 @@ public class ComplaintController {
      */
     @PutMapping("/{id}")
     @ApiOperation(value = "更新拾光", notes = "根据ID更新拾光")
-    public Resp<ComplaintDTO> updateComplaint(
+    public Resp<ComplaintVO> updateComplaint(
             @ApiParam(value = "拾光ID", required = true)
             @PathVariable String id,
             @ApiParam(value = "拾光数据", required = true)

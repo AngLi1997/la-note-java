@@ -2,7 +2,7 @@ package com.liang.liangnote.controller;
 
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.LoginDTO;
-import com.liang.liangnote.dto.LoginResponseDTO;
+import com.liang.liangnote.dto.vo.LoginResponseVO;
 import com.liang.liangnote.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +37,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     @ApiOperation(value = "用户登录", notes = "根据用户名和密码进行登录验证，返回JWT令牌和用户信息")
-    public Resp<LoginResponseDTO> login(@RequestBody @Valid LoginDTO loginDTO) {
+    public Resp<LoginResponseVO> login(@RequestBody @Valid LoginDTO loginDTO) {
         return authService.login(loginDTO);
     }
 } 

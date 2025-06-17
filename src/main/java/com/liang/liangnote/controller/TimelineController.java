@@ -1,9 +1,10 @@
 package com.liang.liangnote.controller;
 
 import com.liang.liangnote.common.Resp;
-import com.liang.liangnote.dto.PageResponseDTO;
 import com.liang.liangnote.dto.TimelineEventDTO;
 import com.liang.liangnote.dto.TimelineEventQueryDTO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
+import com.liang.liangnote.dto.vo.TimelineEventVO;
 import com.liang.liangnote.service.TimelineEventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +30,8 @@ public class TimelineController {
 
     @GetMapping("/events")
     @ApiOperation("获取时间轴事件列表")
-    public Resp<List<TimelineEventDTO>> getTimelineEvents() {
-        List<TimelineEventDTO> events = timelineEventService.getAllEvents();
+    public Resp<List<TimelineEventVO>> getTimelineEvents() {
+        List<TimelineEventVO> events = timelineEventService.getAllEvents();
         return Resp.success(events);
     }
 
@@ -43,13 +44,13 @@ public class TimelineController {
     
     @GetMapping("/list")
     @ApiOperation(value = "分页查询时间轴事件", notes = "支持按分类和日期范围筛选")
-    public Resp<PageResponseDTO<TimelineEventDTO>> listTimelineEvents(TimelineEventQueryDTO queryDTO) {
+    public Resp<PageResponseVO<TimelineEventVO>> listTimelineEvents(TimelineEventQueryDTO queryDTO) {
         return timelineEventService.listTimelineEvents(queryDTO);
     }
     
     @GetMapping("/{id}")
     @ApiOperation(value = "获取时间轴事件详情", notes = "根据ID获取事件详情")
-    public Resp<TimelineEventDTO> getTimelineEventById(
+    public Resp<TimelineEventVO> getTimelineEventById(
             @ApiParam(value = "事件ID", required = true)
             @PathVariable String id) {
         return timelineEventService.getTimelineEventById(id);
@@ -57,7 +58,7 @@ public class TimelineController {
     
     @PostMapping
     @ApiOperation(value = "创建时间轴事件", notes = "创建新的时间轴事件")
-    public Resp<TimelineEventDTO> createTimelineEvent(
+    public Resp<TimelineEventVO> createTimelineEvent(
             @ApiParam(value = "事件数据", required = true)
             @RequestBody TimelineEventDTO eventDTO) {
         return timelineEventService.createTimelineEvent(eventDTO);
@@ -65,7 +66,7 @@ public class TimelineController {
     
     @PutMapping("/{id}")
     @ApiOperation(value = "更新时间轴事件", notes = "根据ID更新时间轴事件")
-    public Resp<TimelineEventDTO> updateTimelineEvent(
+    public Resp<TimelineEventVO> updateTimelineEvent(
             @ApiParam(value = "事件ID", required = true)
             @PathVariable String id,
             @ApiParam(value = "事件数据", required = true)

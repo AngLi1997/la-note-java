@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liang.liangnote.common.Resp;
-import com.liang.liangnote.dto.PageResponseDTO;
 import com.liang.liangnote.dto.TimelineEventDTO;
 import com.liang.liangnote.dto.TimelineEventQueryDTO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
+import com.liang.liangnote.dto.vo.TimelineEventVO;
 import com.liang.liangnote.entity.TimelineEvent;
 import com.liang.liangnote.mapper.TimelineEventMapper;
 import com.liang.liangnote.service.TimelineEventService;
@@ -18,7 +19,6 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +37,7 @@ public class TimelineEventServiceImpl implements TimelineEventService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
-    public List<TimelineEventDTO> getAllEvents() {
+    public List<TimelineEventVO> getAllEvents() {
         // 查询所有未删除的事件，按事件日期降序排序
         LambdaQueryWrapper<TimelineEvent> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(TimelineEvent::getEventDate);
@@ -46,7 +46,7 @@ public class TimelineEventServiceImpl implements TimelineEventService {
         List<TimelineEvent> eventList = timelineEventMapper.selectList(queryWrapper);
         
         // 转换为DTO
-        return eventList.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return eventList.stream().map(this::convertToVO).collect(Collectors.toList());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class TimelineEventServiceImpl implements TimelineEventService {
     }
     
     @Override
-    public Resp<PageResponseDTO<TimelineEventDTO>> listTimelineEvents(TimelineEventQueryDTO queryDTO) {
+    public Resp<PageResponseVO<TimelineEventVO>> listTimelineEvents(TimelineEventQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<TimelineEvent> queryWrapper = Wrappers.lambdaQuery();
         
@@ -103,10 +103,10 @@ public class TimelineEventServiceImpl implements TimelineEventService {
         Page<TimelineEvent> eventPage = timelineEventMapper.selectPage(page, queryWrapper);
         
         // 转换为DTO
-        List<TimelineEventDTO> eventDTOs = eventPage.getRecords().stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<TimelineEventVO> eventDTOs = eventPage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
         
         // 构造分页响应
-        PageResponseDTO<TimelineEventDTO> pageResponse = PageResponseDTO.of(
+        PageResponseVO<TimelineEventVO> pageResponse = PageResponseVO.of(
                 queryDTO.getPageNum(),
                 queryDTO.getPageSize(),
                 eventPage.getTotal(),
@@ -117,7 +117,7 @@ public class TimelineEventServiceImpl implements TimelineEventService {
     }
     
     @Override
-    public Resp<TimelineEventDTO> getTimelineEventById(String id) {
+    public Resp<TimelineEventVO> getTimelineEventById(String id) {
         if (StringUtils.isBlank(id)) {
             return Resp.failed("事件ID不能为空");
         }
@@ -128,13 +128,13 @@ public class TimelineEventServiceImpl implements TimelineEventService {
         }
         
         // 转换为DTO
-        TimelineEventDTO eventDTO = convertToDTO(event);
+        TimelineEventVO eventDTO = convertToVO(event);
         
         return Resp.success(eventDTO);
     }
     
     @Override
-    public Resp<TimelineEventDTO> createTimelineEvent(TimelineEventDTO eventDTO) {
+    public Resp<TimelineEventVO> createTimelineEvent(TimelineEventDTO eventDTO) {
         if (eventDTO == null) {
             return Resp.failed("事件数据不能为空");
         }
@@ -179,7 +179,7 @@ public class TimelineEventServiceImpl implements TimelineEventService {
     }
     
     @Override
-    public Resp<TimelineEventDTO> updateTimelineEvent(TimelineEventDTO eventDTO) {
+    public Resp<TimelineEventVO> updateTimelineEvent(TimelineEventDTO eventDTO) {
         if (eventDTO == null || StringUtils.isBlank(eventDTO.getId())) {
             return Resp.failed("事件ID不能为空");
         }
@@ -254,12 +254,12 @@ public class TimelineEventServiceImpl implements TimelineEventService {
      * @param event 时间轴事件实体
      * @return 时间轴事件DTO
      */
-    private TimelineEventDTO convertToDTO(TimelineEvent event) {
+    private TimelineEventVO convertToVO(TimelineEvent event) {
         if (event == null) {
             return null;
         }
-        
-        TimelineEventDTO dto = new TimelineEventDTO();
+
+        TimelineEventVO dto = new TimelineEventVO();
         BeanUtils.copyProperties(event, dto);
         
         // 格式化日期

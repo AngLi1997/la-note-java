@@ -1,23 +1,22 @@
-package com.liang.liangnote.dto;
+package com.liang.liangnote.dto.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 /**
- * 文章数据传输对象
+ * 文章视图对象
  * @author liang
  * @version 1.0.0
- * @date 2023/11/2
+ * @date 2025/6/1 10:05
  */
 @Data
-@ApiModel(description = "文章数据传输对象")
-public class ArticleDTO {
-
-    @ApiModelProperty("文章ID")
-    private String id;
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(description = "文章视图对象")
+public class ArticleVO extends BaseVO {
 
     @ApiModelProperty("文章标题")
     private String title;
@@ -36,10 +35,10 @@ public class ArticleDTO {
 
     @ApiModelProperty("缩略图URL")
     private String thumbnail;
-
+    
     @ApiModelProperty("浏览量")
     private Integer viewCount;
     
-    @ApiModelProperty("发布状态: 0-草稿, 1-已发布")
+    @ApiModelProperty("文章状态: 0-草稿, 1-已发布")
     private Integer status;
 } 

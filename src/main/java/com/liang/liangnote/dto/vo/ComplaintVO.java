@@ -1,24 +1,23 @@
-package com.liang.liangnote.dto;
+package com.liang.liangnote.dto.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 拾光数据传输对象
+ * 拾光视图对象
  * @author liang
  * @version 1.0.0
- * @date 2023/11/5
+ * @date 2025/6/1 10:10
  */
 @Data
-@ApiModel(description = "拾光数据传输对象")
-public class ComplaintDTO {
-
-    @ApiModelProperty("拾光ID")
-    private String id;
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(description = "拾光视图对象")
+public class ComplaintVO extends BaseVO {
 
     @ApiModelProperty("拾光标题")
     private String title;

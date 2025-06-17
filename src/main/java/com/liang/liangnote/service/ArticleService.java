@@ -3,7 +3,8 @@ package com.liang.liangnote.service;
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.ArticleDTO;
 import com.liang.liangnote.dto.ArticleQueryDTO;
-import com.liang.liangnote.dto.PageResponseDTO;
+import com.liang.liangnote.dto.vo.ArticleVO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface ArticleService {
      * @param queryDTO 查询参数
      * @return 文章列表分页结果
      */
-    Resp<PageResponseDTO<ArticleDTO>> listArticles(ArticleQueryDTO queryDTO);
+    Resp<PageResponseVO<ArticleVO>> listArticles(ArticleQueryDTO queryDTO);
 
     /**
      * 根据ID获取文章详情
@@ -29,7 +30,7 @@ public interface ArticleService {
      * @param id 文章ID
      * @return 文章详情
      */
-    Resp<ArticleDTO> getArticleById(String id);
+    Resp<ArticleVO> getArticleById(String id);
 
     /**
      * 获取所有分类
@@ -51,7 +52,7 @@ public interface ArticleService {
      * @param articleDTO 文章信息
      * @return 创建结果
      */
-    Resp<ArticleDTO> createArticle(ArticleDTO articleDTO);
+    Resp<ArticleVO> createArticle(ArticleDTO articleDTO);
     
     /**
      * 更新文章
@@ -59,7 +60,7 @@ public interface ArticleService {
      * @param articleDTO 文章信息
      * @return 更新结果
      */
-    Resp<ArticleDTO> updateArticle(ArticleDTO articleDTO);
+    Resp<ArticleVO> updateArticle(ArticleDTO articleDTO);
     
     /**
      * 删除文章

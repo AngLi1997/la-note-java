@@ -4,6 +4,8 @@ import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.PageResponseDTO;
 import com.liang.liangnote.dto.TimelineEventDTO;
 import com.liang.liangnote.dto.TimelineEventQueryDTO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
+import com.liang.liangnote.dto.vo.TimelineEventVO;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface TimelineEventService {
      * 获取所有时间轴事件
      * @return 时间轴事件列表
      */
-    List<TimelineEventDTO> getAllEvents();
+    List<TimelineEventVO> getAllEvents();
 
     /**
      * 获取所有时间轴事件分类
@@ -33,7 +35,7 @@ public interface TimelineEventService {
      * @param queryDTO 查询参数
      * @return 分页结果
      */
-    Resp<PageResponseDTO<TimelineEventDTO>> listTimelineEvents(TimelineEventQueryDTO queryDTO);
+    Resp<PageResponseVO<TimelineEventVO>> listTimelineEvents(TimelineEventQueryDTO queryDTO);
     
     /**
      * 获取时间轴事件详情
@@ -41,7 +43,7 @@ public interface TimelineEventService {
      * @param id 事件ID
      * @return 事件详情
      */
-    Resp<TimelineEventDTO> getTimelineEventById(String id);
+    Resp<TimelineEventVO> getTimelineEventById(String id);
     
     /**
      * 创建时间轴事件
@@ -49,7 +51,7 @@ public interface TimelineEventService {
      * @param eventDTO 事件数据
      * @return 创建结果
      */
-    Resp<TimelineEventDTO> createTimelineEvent(TimelineEventDTO eventDTO);
+    Resp<TimelineEventVO> createTimelineEvent(TimelineEventDTO eventDTO);
     
     /**
      * 更新时间轴事件
@@ -57,7 +59,7 @@ public interface TimelineEventService {
      * @param eventDTO 事件数据
      * @return 更新结果
      */
-    Resp<TimelineEventDTO> updateTimelineEvent(TimelineEventDTO eventDTO);
+    Resp<TimelineEventVO> updateTimelineEvent(TimelineEventDTO eventDTO);
     
     /**
      * 删除时间轴事件

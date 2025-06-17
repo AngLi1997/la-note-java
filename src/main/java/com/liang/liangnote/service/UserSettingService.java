@@ -1,6 +1,7 @@
 package com.liang.liangnote.service;
 
 import com.liang.liangnote.dto.UserSettingDTO;
+import com.liang.liangnote.dto.vo.UserSettingVO;
 import com.liang.liangnote.entity.UserSetting;
 
 /**
@@ -30,5 +31,5 @@ public interface UserSettingService {
      * @param userId 用户ID
      * @return 用户设置DTO
      */
-    UserSettingDTO getUserSettingInfo(String userId);
+    UserSettingVO getUserSettingInfo(String userId);
 } 

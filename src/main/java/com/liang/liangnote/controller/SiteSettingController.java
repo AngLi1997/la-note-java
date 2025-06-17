@@ -2,6 +2,7 @@ package com.liang.liangnote.controller;
 
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.SiteSettingDTO;
+import com.liang.liangnote.dto.vo.SiteSettingVO;
 import com.liang.liangnote.service.SiteSettingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,9 +30,9 @@ public class SiteSettingController {
      */
     @GetMapping
     @ApiOperation("获取网站设置")
-    public Resp<SiteSettingDTO> getSiteSetting() {
-        SiteSettingDTO siteSettingDTO = siteSettingService.getSiteSetting();
-        return Resp.success(siteSettingDTO);
+    public Resp<SiteSettingVO> getSiteSetting() {
+        SiteSettingVO siteSettingVO = siteSettingService.getSiteSetting();
+        return Resp.success(siteSettingVO);
     }
     
     /**
@@ -41,8 +42,8 @@ public class SiteSettingController {
      */
     @PutMapping
     @ApiOperation("更新网站设置")
-    public Resp<SiteSettingDTO> updateSiteSetting(@RequestBody SiteSettingDTO siteSettingDTO) {
-        SiteSettingDTO updatedSetting = siteSettingService.updateSiteSetting(siteSettingDTO);
+    public Resp<SiteSettingVO> updateSiteSetting(@RequestBody SiteSettingDTO siteSettingDTO) {
+        SiteSettingVO updatedSetting = siteSettingService.updateSiteSetting(siteSettingDTO);
         return Resp.success(updatedSetting);
     }
 } 

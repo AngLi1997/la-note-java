@@ -1,7 +1,7 @@
 package com.liang.liangnote.controller;
 
 import com.liang.liangnote.common.Resp;
-import com.liang.liangnote.dto.FileUploadDTO;
+import com.liang.liangnote.dto.vo.FileUploadVO;
 import com.liang.liangnote.service.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,12 +38,12 @@ public class FileController {
      */
     @PostMapping("/upload")
     @ApiOperation("上传文件")
-    public Resp<FileUploadDTO> uploadFile(
+    public Resp<FileUploadVO> uploadFile(
             @RequestParam("file") MultipartFile file,
             @ApiParam(value = "文件夹前缀，如：user/avatar/、product/image/", required = false)
             @RequestParam(value = "folderPrefix", required = false) String folderPrefix) {
         log.info("开始上传文件: {}, 前缀: {}", file.getOriginalFilename(), folderPrefix);
-        FileUploadDTO result = fileService.uploadFile(file, folderPrefix);
+        FileUploadVO result = fileService.uploadFile(file, folderPrefix);
         return Resp.success(result);
     }
 } 

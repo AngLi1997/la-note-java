@@ -2,6 +2,7 @@ package com.liang.liangnote.service.impl;
 
 import com.liang.liangnote.config.MinioConfig;
 import com.liang.liangnote.dto.FileUploadDTO;
+import com.liang.liangnote.dto.vo.FileUploadVO;
 import com.liang.liangnote.exception.BusinessException;
 import com.liang.liangnote.service.FileService;
 import io.minio.*;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -32,12 +34,12 @@ public class FileServiceImpl implements FileService {
     private MinioConfig minioConfig;
 
     @Override
-    public FileUploadDTO uploadFile(MultipartFile file) {
+    public FileUploadVO uploadFile(MultipartFile file) {
         return uploadFile(file, null);
     }
     
     @Override
-    public FileUploadDTO uploadFile(MultipartFile file, String folderPrefix) {
+    public FileUploadVO uploadFile(MultipartFile file, String folderPrefix) {
         if (file == null || file.isEmpty()) {
             throw new BusinessException("上传文件不能为空");
         }
@@ -99,7 +101,7 @@ public class FileServiceImpl implements FileService {
                             .method(Method.GET)
                     .build());
             // 构建并返回结果
-            return new FileUploadDTO(originalFilename, objectName, file.getSize(), contentType, url);
+            return new FileUploadVO(originalFilename, objectName, file.getSize(), contentType, url);
         } catch (Exception e) {
             log.error("文件上传失败", e);
             throw new BusinessException("文件上传失败: " + e.getMessage());

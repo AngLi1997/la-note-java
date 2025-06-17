@@ -2,6 +2,7 @@ package com.liang.liangnote.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liang.liangnote.dto.UserSettingDTO;
+import com.liang.liangnote.dto.vo.UserSettingVO;
 import com.liang.liangnote.entity.User;
 import com.liang.liangnote.entity.UserSetting;
 import com.liang.liangnote.mapper.UserMapper;
@@ -84,7 +85,7 @@ public class UserSettingServiceImpl implements UserSettingService {
     }
 
     @Override
-    public UserSettingDTO getUserSettingInfo(String userId) {
+    public UserSettingVO getUserSettingInfo(String userId) {
         // 查询用户信息
         User user = userMapper.selectById(userId);
         if (user == null) {
@@ -95,7 +96,7 @@ public class UserSettingServiceImpl implements UserSettingService {
         UserSetting userSetting = getByUserId(userId);
         
         // 组装返回数据
-        UserSettingDTO dto = new UserSettingDTO();
+        UserSettingVO dto = new UserSettingVO();
         dto.setUserId(userId);
         dto.setUsername(user.getUsername());
         dto.setNickname(user.getNickname());

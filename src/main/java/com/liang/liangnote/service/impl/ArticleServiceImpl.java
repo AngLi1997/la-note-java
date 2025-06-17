@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.ArticleDTO;
 import com.liang.liangnote.dto.ArticleQueryDTO;
-import com.liang.liangnote.dto.PageResponseDTO;
+import com.liang.liangnote.dto.vo.ArticleVO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
 import com.liang.liangnote.entity.Article;
 import com.liang.liangnote.mapper.ArticleMapper;
 import com.liang.liangnote.service.ArticleService;
@@ -33,7 +34,7 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
 
     @Override
-    public Resp<PageResponseDTO<ArticleDTO>> listArticles(ArticleQueryDTO queryDTO) {
+    public Resp<PageResponseVO<ArticleVO>> listArticles(ArticleQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
         // 只有当status不为null时才加状态筛选，否则查全部
@@ -55,15 +56,15 @@ public class ArticleServiceImpl implements ArticleService {
         Page<Article> page = new Page<>(queryDTO.getPageNum(), queryDTO.getPageSize());
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
 
-        // 转换为DTO
-        List<ArticleDTO> articleDTOs = articlePage.getRecords().stream().map(this::convertToDTO).collect(Collectors.toList());
+        // 转换为VO
+        List<ArticleVO> articleVOs = articlePage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
 
         // 构造分页响应
-        PageResponseDTO<ArticleDTO> pageResponse = PageResponseDTO.of(
+        PageResponseVO<ArticleVO> pageResponse = PageResponseVO.of(
                 queryDTO.getPageNum(),
                 queryDTO.getPageSize(),
                 articlePage.getTotal(),
-                articleDTOs
+                articleVOs
         );
 
         return Resp.success(pageResponse);
@@ -110,7 +111,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Resp<ArticleDTO> getArticleById(String id) {
+    public Resp<ArticleVO> getArticleById(String id) {
         // 查询文章
         Article article = articleMapper.selectById(id);
 
@@ -123,32 +124,32 @@ public class ArticleServiceImpl implements ArticleService {
         article.setViewCount(article.getViewCount() + 1);
         articleMapper.updateById(article);
 
-        // 转换为DTO
-        ArticleDTO articleDTO = convertToDTO(article);
+        // 转换为VO
+        ArticleVO articleVO = convertToVO(article);
 
-        return Resp.success(articleDTO);
+        return Resp.success(articleVO);
     }
 
     /**
-     * 将文章实体转换为DTO
+     * 将文章实体转换为VO
      *
      * @param article 文章实体
-     * @return 文章DTO
+     * @return 文章VO
      */
-    private ArticleDTO convertToDTO(Article article) {
-        ArticleDTO dto = new ArticleDTO();
-        BeanUtils.copyProperties(article, dto);
+    private ArticleVO convertToVO(Article article) {
+        ArticleVO vo = new ArticleVO();
+        BeanUtils.copyProperties(article, vo);
 
         // 处理标签
         if (StringUtils.isNotBlank(article.getTags())) {
-            dto.setTags(Arrays.asList(article.getTags().split(",")));
+            vo.setTags(Arrays.asList(article.getTags().split(",")));
         } else {
-            dto.setTags(new ArrayList<>());
+            vo.setTags(new ArrayList<>());
         }
 
-        return dto;
+        return vo;
     }
-
+    
     /**
      * 将DTO转换为文章实体
      *
@@ -173,7 +174,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public Resp<ArticleDTO> createArticle(ArticleDTO articleDTO) {
+    public Resp<ArticleVO> createArticle(ArticleDTO articleDTO) {
         // 转换为实体
         Article article = convertToEntity(articleDTO);
         
@@ -181,11 +182,11 @@ public class ArticleServiceImpl implements ArticleService {
         articleMapper.insert(article);
         
         // 返回结果
-        return Resp.success(convertToDTO(article));
+        return Resp.success(convertToVO(article));
     }
     
     @Override
-    public Resp<ArticleDTO> updateArticle(ArticleDTO articleDTO) {
+    public Resp<ArticleVO> updateArticle(ArticleDTO articleDTO) {
         // 校验文章是否存在
         if (StringUtils.isBlank(articleDTO.getId())) {
             return Resp.failed("文章ID不能为空");
@@ -202,8 +203,11 @@ public class ArticleServiceImpl implements ArticleService {
         // 更新数据库
         articleMapper.updateById(article);
         
+        // 查询更新后的文章并返回
+        Article updatedArticle = articleMapper.selectById(article.getId());
+        
         // 返回结果
-        return Resp.success(convertToDTO(article));
+        return Resp.success(convertToVO(updatedArticle));
     }
     
     @Override

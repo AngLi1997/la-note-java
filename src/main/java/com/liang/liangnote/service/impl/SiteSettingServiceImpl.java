@@ -3,6 +3,7 @@ package com.liang.liangnote.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liang.liangnote.dto.SiteSettingDTO;
+import com.liang.liangnote.dto.vo.SiteSettingVO;
 import com.liang.liangnote.entity.SiteSetting;
 import com.liang.liangnote.mapper.SiteSettingMapper;
 import com.liang.liangnote.service.SiteSettingService;
@@ -28,7 +29,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
     private SiteSettingMapper siteSettingMapper;
     
     @Override
-    public SiteSettingDTO getSiteSetting() {
+    public SiteSettingVO getSiteSetting() {
         // 查询默认网站设置
         LambdaQueryWrapper<SiteSetting> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SiteSetting::getIsDefault, true);
@@ -44,16 +45,16 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         
         // 如果仍然为空，则返回空DTO
         if (siteSetting == null) {
-            return new SiteSettingDTO();
+            return new SiteSettingVO();
         }
         
         // 转换为DTO
-        return convertToDTO(siteSetting);
+        return convertToVO(siteSetting);
     }
     
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public SiteSettingDTO updateSiteSetting(SiteSettingDTO siteSettingDTO) {
+    public SiteSettingVO updateSiteSetting(SiteSettingDTO siteSettingDTO) {
         // 查询是否存在
         SiteSetting siteSetting;
         if (StringUtils.hasText(siteSettingDTO.getId())) {
@@ -93,7 +94,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         }
         
         // 返回更新后的DTO
-        return convertToDTO(siteSetting);
+        return convertToVO(siteSetting);
     }
     
     /**
@@ -101,8 +102,8 @@ public class SiteSettingServiceImpl implements SiteSettingService {
      * @param siteSetting 网站设置实体
      * @return 网站设置DTO
      */
-    private SiteSettingDTO convertToDTO(SiteSetting siteSetting) {
-        SiteSettingDTO dto = new SiteSettingDTO();
+    private SiteSettingVO convertToVO(SiteSetting siteSetting) {
+        SiteSettingVO dto = new SiteSettingVO();
         BeanUtils.copyProperties(siteSetting, dto);
         
         // 处理社交链接

@@ -2,6 +2,7 @@ package com.liang.liangnote.controller;
 
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.UserSettingDTO;
+import com.liang.liangnote.dto.vo.UserSettingVO;
 import com.liang.liangnote.entity.UserSetting;
 import com.liang.liangnote.service.UserSettingService;
 import io.swagger.annotations.Api;
@@ -32,21 +33,21 @@ public class UserSettingController {
      */
     @GetMapping("/{userId}")
     @ApiOperation(value = "获取用户设置信息", notes = "根据用户ID获取用户设置信息")
-    public Resp<UserSettingDTO> getUserSettingInfo(@PathVariable String userId) {
-        UserSettingDTO userSettingDTO = userSettingService.getUserSettingInfo(userId);
-        return Resp.success(userSettingDTO);
+    public Resp<UserSettingVO> getUserSettingInfo(@PathVariable String userId) {
+        UserSettingVO userSettingVO = userSettingService.getUserSettingInfo(userId);
+        return Resp.success(userSettingVO);
     }
 
     /**
      * 保存或更新用户设置
      *
-     * @param userSetting 用户设置信息
+     * @param userSettingDTO 用户设置信息
      * @return 操作结果
      */
     @PostMapping("/save")
     @ApiOperation(value = "保存或更新用户设置", notes = "保存或更新用户设置信息")
-    public Resp<Boolean> saveOrUpdateSetting(@RequestBody UserSetting userSetting) {
-        boolean result = userSettingService.saveOrUpdateSetting(userSetting);
+    public Resp<Boolean> saveOrUpdateSetting(@RequestBody UserSetting userSettingDTO) {
+        boolean result = userSettingService.saveOrUpdateSetting(userSettingDTO);
         return Resp.success(result);
     }
 } 

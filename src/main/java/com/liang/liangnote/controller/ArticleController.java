@@ -3,7 +3,8 @@ package com.liang.liangnote.controller;
 import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.ArticleDTO;
 import com.liang.liangnote.dto.ArticleQueryDTO;
-import com.liang.liangnote.dto.PageResponseDTO;
+import com.liang.liangnote.dto.vo.ArticleVO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
 import com.liang.liangnote.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +35,7 @@ public class ArticleController {
      */
     @GetMapping("/list")
     @ApiOperation(value = "分页查询文章列表", notes = "支持按分类和标签筛选")
-    public Resp<PageResponseDTO<ArticleDTO>> listArticles(ArticleQueryDTO queryDTO) {
+    public Resp<PageResponseVO<ArticleVO>> listArticles(ArticleQueryDTO queryDTO) {
         return articleService.listArticles(queryDTO);
     }
 
@@ -46,7 +47,7 @@ public class ArticleController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "获取文章详情", notes = "根据文章ID获取详细信息")
-    public Resp<ArticleDTO> getArticleById(@PathVariable String id) {
+    public Resp<ArticleVO> getArticleById(@PathVariable String id) {
         return articleService.getArticleById(id);
     }
 
@@ -80,7 +81,7 @@ public class ArticleController {
      */
     @PostMapping
     @ApiOperation(value = "创建文章", notes = "创建新文章")
-    public Resp<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
+    public Resp<ArticleVO> createArticle(@RequestBody ArticleDTO articleDTO) {
         return articleService.createArticle(articleDTO);
     }
     
@@ -93,7 +94,7 @@ public class ArticleController {
      */
     @PutMapping("/{id}")
     @ApiOperation(value = "更新文章", notes = "根据ID更新文章信息")
-    public Resp<ArticleDTO> updateArticle(@PathVariable String id, @RequestBody ArticleDTO articleDTO) {
+    public Resp<ArticleVO> updateArticle(@PathVariable String id, @RequestBody ArticleDTO articleDTO) {
         articleDTO.setId(id);
         return articleService.updateArticle(articleDTO);
     }

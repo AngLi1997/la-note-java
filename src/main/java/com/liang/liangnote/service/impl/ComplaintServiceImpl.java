@@ -7,6 +7,8 @@ import com.liang.liangnote.common.Resp;
 import com.liang.liangnote.dto.ComplaintDTO;
 import com.liang.liangnote.dto.ComplaintQueryDTO;
 import com.liang.liangnote.dto.PageResponseDTO;
+import com.liang.liangnote.dto.vo.ComplaintVO;
+import com.liang.liangnote.dto.vo.PageResponseVO;
 import com.liang.liangnote.entity.Complaint;
 import com.liang.liangnote.mapper.ComplaintMapper;
 import com.liang.liangnote.service.ComplaintService;
@@ -15,7 +17,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     private ComplaintMapper complaintMapper;
 
     @Override
-    public Resp<PageResponseDTO<ComplaintDTO>> listComplaints(ComplaintQueryDTO queryDTO) {
+    public Resp<PageResponseVO<ComplaintVO>> listComplaints(ComplaintQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<Complaint> queryWrapper = Wrappers.lambdaQuery();
         // 只有当不是管理页面查询时，才只查询已发布的拾光
@@ -52,10 +53,10 @@ public class ComplaintServiceImpl implements ComplaintService {
         Page<Complaint> complaintPage = complaintMapper.selectPage(page, queryWrapper);
 
         // 转换为DTO
-        List<ComplaintDTO> complaintDTOs = complaintPage.getRecords().stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<ComplaintVO> complaintDTOs = complaintPage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
 
         // 构造分页响应
-        PageResponseDTO<ComplaintDTO> pageResponse = PageResponseDTO.of(
+        PageResponseVO<ComplaintVO> pageResponse = PageResponseVO.of(
                 queryDTO.getPageNum(),
                 queryDTO.getPageSize(),
                 complaintPage.getTotal(),
@@ -84,7 +85,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
     
     @Override
-    public Resp<ComplaintDTO> getComplaintById(String id) {
+    public Resp<ComplaintVO> getComplaintById(String id) {
         if (StringUtils.isBlank(id)) {
             return Resp.failed("拾光ID不能为空");
         }
@@ -95,13 +96,13 @@ public class ComplaintServiceImpl implements ComplaintService {
         }
         
         // 转换为DTO
-        ComplaintDTO complaintDTO = convertToDTO(complaint);
+        ComplaintVO complaintDTO = convertToVO(complaint);
         
         return Resp.success(complaintDTO);
     }
     
     @Override
-    public Resp<ComplaintDTO> createComplaint(ComplaintDTO complaintDTO) {
+    public Resp<ComplaintVO> createComplaint(ComplaintDTO complaintDTO) {
         if (complaintDTO == null) {
             return Resp.failed("拾光数据不能为空");
         }
@@ -125,7 +126,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
     
     @Override
-    public Resp<ComplaintDTO> updateComplaint(ComplaintDTO complaintDTO) {
+    public Resp<ComplaintVO> updateComplaint(ComplaintDTO complaintDTO) {
         if (complaintDTO == null || StringUtils.isBlank(complaintDTO.getId())) {
             return Resp.failed("拾光ID不能为空");
         }
@@ -178,8 +179,8 @@ public class ComplaintServiceImpl implements ComplaintService {
      * @param complaint 拾光实体
      * @return 拾光DTO
      */
-    private ComplaintDTO convertToDTO(Complaint complaint) {
-        ComplaintDTO dto = new ComplaintDTO();
+    private ComplaintVO convertToVO(Complaint complaint) {
+        ComplaintVO dto = new ComplaintVO();
         BeanUtils.copyProperties(complaint, dto);
         
         // 处理图片列表

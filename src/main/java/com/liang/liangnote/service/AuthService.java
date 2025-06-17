@@ -3,6 +3,7 @@ package com.liang.liangnote.service;
 import com.liang.liangnote.dto.LoginDTO;
 import com.liang.liangnote.dto.LoginResponseDTO;
 import com.liang.liangnote.common.Resp;
+import com.liang.liangnote.dto.vo.LoginResponseVO;
 
 /**
  * 认证服务接口
@@ -18,5 +19,5 @@ public interface AuthService {
      * @param loginDTO 登录请求DTO
      * @return 登录响应
      */
-    Resp<LoginResponseDTO> login(LoginDTO loginDTO);
+    Resp<LoginResponseVO> login(LoginDTO loginDTO);
 } 

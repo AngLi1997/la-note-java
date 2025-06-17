@@ -1,6 +1,7 @@
 package com.liang.liangnote.service;
 
 import com.liang.liangnote.dto.SiteSettingDTO;
+import com.liang.liangnote.dto.vo.SiteSettingVO;
 
 /**
  * 网站设置服务接口
@@ -14,12 +15,12 @@ public interface SiteSettingService {
      * 获取网站设置
      * @return 网站设置DTO
      */
-    SiteSettingDTO getSiteSetting();
+    SiteSettingVO getSiteSetting();
     
     /**
      * 更新网站设置
      * @param siteSettingDTO 网站设置DTO
      * @return 更新后的网站设置DTO
      */
-    SiteSettingDTO updateSiteSetting(SiteSettingDTO siteSettingDTO);
+    SiteSettingVO updateSiteSetting(SiteSettingDTO siteSettingDTO);
 } 
