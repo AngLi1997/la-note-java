@@ -35,7 +35,7 @@ jwt:
 
 site-config:
   minio:
-    endpoint: http://localhost:9000
+    endpoint: http://www.liangliang.cloud:9000
     accessKey: minioadmin
     secretKey: minioadmin
     bucketName: la-note
