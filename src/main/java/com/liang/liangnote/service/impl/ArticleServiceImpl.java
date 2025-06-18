@@ -8,6 +8,7 @@ import com.liang.liangnote.dto.ArticleDTO;
 import com.liang.liangnote.dto.ArticleQueryDTO;
 import com.liang.liangnote.dto.vo.ArticleVO;
 import com.liang.liangnote.dto.vo.PageResponseVO;
+import com.liang.liangnote.dto.vo.TagVO;
 import com.liang.liangnote.entity.Article;
 import com.liang.liangnote.mapper.ArticleMapper;
 import com.liang.liangnote.service.ArticleService;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -103,24 +106,38 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Resp<List<String>> listTags() {
+    public Resp<List<TagVO>> listTags() {
         // 查询所有标签
         LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.select(Article::getTags)
                 .isNotNull(Article::getTags)
                 .ne(Article::getTags, "");
 
-        List<String> allTags = articleMapper.selectList(queryWrapper)
-                .stream()
-                .map(Article::getTags)
-                .filter(StringUtils::isNotBlank)
-                .flatMap(tags -> Arrays.stream(tags.split(",")))
-                .map(String::trim)
-                .filter(StringUtils::isNotBlank)
-                .distinct()
+        // 获取所有文章的标签字段
+        List<Article> articles = articleMapper.selectList(queryWrapper);
+        
+        // 统计每个标签的文章数量
+        Map<String, Integer> tagCountMap = new HashMap<>();
+        
+        // 遍历所有文章，统计每个标签出现的次数
+        for (Article article : articles) {
+            if (StringUtils.isNotBlank(article.getTags())) {
+                String[] tagArray = article.getTags().split(",");
+                for (String tag : tagArray) {
+                    String trimmedTag = tag.trim();
+                    if (StringUtils.isNotBlank(trimmedTag)) {
+                        tagCountMap.put(trimmedTag, tagCountMap.getOrDefault(trimmedTag, 0) + 1);
+                    }
+                }
+            }
+        }
+        
+        // 转换为TagVO列表
+        List<TagVO> tagVOList = tagCountMap.entrySet().stream()
+                .map(entry -> new TagVO(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
-
-        return Resp.success(allTags);
+        
+        return Resp.success(tagVOList);
     }
 
     @Override
@@ -250,6 +267,9 @@ public class ArticleServiceImpl implements ArticleService {
         
         // 转换为实体
         Article article = convertToEntity(articleDTO);
+        
+        // 保留原有的浏览量
+        article.setViewCount(existingArticle.getViewCount());
         
         // 更新数据库
         articleMapper.updateById(article);

@@ -5,6 +5,7 @@ import com.liang.liangnote.dto.ArticleDTO;
 import com.liang.liangnote.dto.ArticleQueryDTO;
 import com.liang.liangnote.dto.vo.ArticleVO;
 import com.liang.liangnote.dto.vo.PageResponseVO;
+import com.liang.liangnote.dto.vo.TagVO;
 
 import java.util.List;
 
@@ -40,11 +41,11 @@ public interface ArticleService {
     Resp<List<String>> listCategories();
 
     /**
-     * 获取所有标签
+     * 获取所有标签及其文章数量
      *
      * @return 标签列表
      */
-    Resp<List<String>> listTags();
+    Resp<List<TagVO>> listTags();
     
     /**
      * 创建文章

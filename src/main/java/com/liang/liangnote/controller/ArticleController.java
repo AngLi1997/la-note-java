@@ -5,6 +5,7 @@ import com.liang.liangnote.dto.ArticleDTO;
 import com.liang.liangnote.dto.ArticleQueryDTO;
 import com.liang.liangnote.dto.vo.ArticleVO;
 import com.liang.liangnote.dto.vo.PageResponseVO;
+import com.liang.liangnote.dto.vo.TagVO;
 import com.liang.liangnote.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -68,8 +69,8 @@ public class ArticleController {
      * @return 标签列表
      */
     @GetMapping("/tags")
-    @ApiOperation(value = "获取所有标签", notes = "返回所有文章标签列表")
-    public Resp<List<String>> listTags() {
+    @ApiOperation(value = "获取所有标签", notes = "返回所有文章标签列表及其文章数量")
+    public Resp<List<TagVO>> listTags() {
         return articleService.listTags();
     }
     
