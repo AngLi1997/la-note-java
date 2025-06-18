@@ -117,6 +117,7 @@ echo "==== [5] 生成后端 Dockerfile ===="
 
 cat > /root/la-note/backend/Dockerfile <<EOF
 FROM openjdk:8-jdk-alpine
+ENV TZ=Asia/Shanghai
 VOLUME /tmp
 COPY liang-note-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["sh", "-c", "java \$JAVA_OPTS -jar /app.jar"]
