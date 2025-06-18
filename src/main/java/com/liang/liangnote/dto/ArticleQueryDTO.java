@@ -28,4 +28,7 @@ public class ArticleQueryDTO {
 
     @ApiModelProperty("文章状态: 0-草稿, 1-已发布，可选")
     private Integer status;
+    
+    @ApiModelProperty("是否包含文章内容，默认不包含")
+    private Boolean includeContent = false;
 } 

@@ -26,6 +26,9 @@ public class ArticleVO extends BaseVO {
 
     @ApiModelProperty("文章内容")
     private String content;
+    
+    @ApiModelProperty("内容预览（当content不返回时使用）")
+    private String contentPreview;
 
     @ApiModelProperty("文章分类")
     private String category;

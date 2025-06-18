@@ -37,6 +37,12 @@ public class ArticleServiceImpl implements ArticleService {
     public Resp<PageResponseVO<ArticleVO>> listArticles(ArticleQueryDTO queryDTO) {
         // 构建查询条件
         LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
+        
+        // 如果不需要内容，则排除content字段
+        if (queryDTO.getIncludeContent() == null || !queryDTO.getIncludeContent()) {
+            queryWrapper.select(Article.class, info -> !info.getColumn().equals("content"));
+        }
+        
         // 只有当status不为null时才加状态筛选，否则查全部
         if (queryDTO.getStatus() != null) {
             queryWrapper.eq(Article::getStatus, queryDTO.getStatus());
@@ -57,7 +63,14 @@ public class ArticleServiceImpl implements ArticleService {
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
 
         // 转换为VO
-        List<ArticleVO> articleVOs = articlePage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
+        List<ArticleVO> articleVOs;
+        if (queryDTO.getIncludeContent() != null && queryDTO.getIncludeContent()) {
+            // 如果需要内容，使用完整转换
+            articleVOs = articlePage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
+        } else {
+            // 如果不需要内容，使用列表转换（不包含content）
+            articleVOs = articlePage.getRecords().stream().map(this::convertToListVO).collect(Collectors.toList());
+        }
 
         // 构造分页响应
         PageResponseVO<ArticleVO> pageResponse = PageResponseVO.of(
@@ -131,7 +144,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     /**
-     * 将文章实体转换为VO
+     * 将文章实体转换为VO（完整版，包含content）
      *
      * @param article 文章实体
      * @return 文章VO
@@ -147,6 +160,44 @@ public class ArticleServiceImpl implements ArticleService {
             vo.setTags(new ArrayList<>());
         }
 
+        return vo;
+    }
+    
+    /**
+     * 将文章实体转换为列表VO（不包含content）
+     *
+     * @param article 文章实体
+     * @return 文章列表VO
+     */
+    private ArticleVO convertToListVO(Article article) {
+        ArticleVO vo = new ArticleVO();
+        BeanUtils.copyProperties(article, vo);
+        
+        // 处理标签
+        if (StringUtils.isNotBlank(article.getTags())) {
+            vo.setTags(Arrays.asList(article.getTags().split(",")));
+        } else {
+            vo.setTags(new ArrayList<>());
+        }
+        
+        // 生成内容预览
+        if (StringUtils.isNotBlank(article.getSummary())) {
+            // 如果有摘要，优先使用摘要作为预览
+            vo.setContentPreview(article.getSummary());
+        } else if (StringUtils.isNotBlank(article.getContent())) {
+            // 如果内容过长，截取前100个字符作为预览
+            int previewLength = 100;
+            String content = article.getContent();
+            if (content.length() > previewLength) {
+                vo.setContentPreview(content.substring(0, previewLength) + "...");
+            } else {
+                vo.setContentPreview(content);
+            }
+        }
+        
+        // 确保不返回内容
+        vo.setContent(null);
+        
         return vo;
     }
     
